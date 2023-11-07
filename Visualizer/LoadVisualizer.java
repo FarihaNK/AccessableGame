@@ -6,7 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.List;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -150,7 +150,7 @@ public class LoadVisualizer {
         try {
             file = new FileInputStream(GameFile);
             in = new ObjectInputStream(file);
-            return (AccessableGame) Game) in.readObject();
+            return (AccessableGame) in.readObject();
         } finally {
             if (in != null) {
                 in.close();

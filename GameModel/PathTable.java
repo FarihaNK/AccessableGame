@@ -29,7 +29,7 @@ public class PathTable implements Serializable {
      *             particular exit from a room.
      */
     void addDirection(Path entry) {
-        PathTable.add(entry);
+        pathTable.add(entry);
     }
 
 

@@ -1,7 +1,7 @@
 import GameModel.AccessableGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import views.GameVisualizer;
+import Visualizer.GameVisualizer;
 
 import java.io.IOException;
 
