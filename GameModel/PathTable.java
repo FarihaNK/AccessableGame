@@ -4,48 +4,48 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * The PassageTable class keeps track of all the exits or locations
+ * The PathTable class keeps track of all the exits or locations
  * a player can go from a room.
  */
 public class PathTable implements Serializable {
 
     /**
-     * A list of all the Passages that exists from a room.
+     * A list of all the paths that exists from a room.
      */
     public List<Path> pathTable;
 
     /**
-     * PassageTable constructor
+     * PathTable constructor
      */
     public PathTable() {
         this.pathTable = new ArrayList<>();
     }
 
     /**
-     * This method adds an exit or passage
+     * This method adds an exit or path
      * to the table.
      *
-     * @param entry A Passage which keeps track of a
+     * @param entry A Path which keeps track of a
      *             particular exit from a room.
      */
-    void addDirection(Passage entry) {
-        passageTable.add(entry);
+    void addDirection(Path entry) {
+        PathTable.add(entry);
     }
 
 
     /**
-     * Getter method for passage table.
+     * Getter method for path table.
      *
-     * @return this.passageTable
+     * @return this.pathTable
      */
-    public List<Passage> getDirection(){ return this.passageTable; }
+    public List<Path> getDirection(){ return this.pathTable; }
 
     /**
      * Pretty print the table.
      */
     public void printTable(){
-        for (Passage m: this.passageTable) {
-            m.printPassage();
+        for (Path m: this.pathTable) {
+            m.printPath();
         }
     }
 
@@ -56,7 +56,7 @@ public class PathTable implements Serializable {
      * @return true if option exists in MotionTable, else false
      */
     public boolean optionExists(String direction) {
-        for (Passage m : this.passageTable) {
+        for (Path m : this.pathTable) {
             if (m.getDirection().equals(direction)) return true;
         }
         return false;

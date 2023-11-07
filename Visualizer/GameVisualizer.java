@@ -1,8 +1,8 @@
 package Visualizer;
 
-import AdventureModel.AdventureGame;
-import AdventureModel.AdventureObject;
-import AdventureModel.Passage;
+import GameModel.AccessableGame;
+import GameModel.GameObject;
+import GameModel.Path;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.Stack;
 
 /**
- * Class AdventureGameView.
+ * Class GameVisualizer.
  *
  * This is the Class that will visualize your model.
  * You are asked to demo your visualization via a Zoom
@@ -43,9 +43,9 @@ import java.util.Stack;
  *
  * SHAREPOINT: https://utoronto-my.sharepoint.com/:v:/g/personal/farihanawed_khan_mail_utoronto_ca/EYuJD6Wqr1xIsBm3qIlDmvwBkmPOKim3AncGLICZjVmUYw?email=s.allin%40utoronto.ca&e=A0ZKfo
  */
-public class AdventureGameView {
+public class GameVisualizer {
 
-    AdventureGame model; //model of the game
+    AccessableGame model; //model of the game
     Stage stage; //stage on which all is rendered
     Button saveButton, loadButton, helpButton; //buttons
     Boolean helpToggle = false; //is help on display?
@@ -62,11 +62,11 @@ public class AdventureGameView {
     private boolean mediaPlaying; //to know if the audio is playing
 
     /**
-     * Adventure Game View Constructor
+     * Accessable Game View Constructor
      * __________________________
      * Initializes attributes
      */
-    public AdventureGameView(AdventureGame model, Stage stage) {
+    public GameVisualizer(AccessableGame model, Stage stage) {
         this.model = model;
         this.stage = stage;
         intiUI();
@@ -78,7 +78,7 @@ public class AdventureGameView {
     public void intiUI() {
 
         // setting up the stage
-        this.stage.setTitle("khanf176's Adventure Game"); //Replace <YOUR UTORID> with your UtorID
+        this.stage.setTitle("My Accessable Game"); //Replace <YOUR UTORID> with your UtorID
 
         //Inventory + Room items
         objectsInInventory.setSpacing(10);
@@ -315,8 +315,8 @@ public class AdventureGameView {
         StringBuilder commandstext = new StringBuilder();
         commandstext.append(roomDescLabel.getText());
         commandstext.append("\n\nThe possible moves for this room:\n");
-        List<Passage> ptable = this.model.getPlayer().getCurrentRoom().getMotionTable().passageTable;
-        for (Passage p: ptable) {
+        List<Path> ptable = this.model.getPlayer().getCurrentRoom().getMotionTable().pathTable;
+        for (Path p: ptable) {
             commandstext.append(p.getDirection()).append("\n");
         }
         roomDescLabel.setText(commandstext.toString());
@@ -420,7 +420,7 @@ public class AdventureGameView {
     /** Helper Method
      * This method returns true if the image button already exists in the VBox
      */
-    private boolean nodeinvbox(AdventureObject obj, VBox section) {
+    private boolean nodeinvbox(GameObject obj, VBox section) {
         for (Node n: section.getChildren()) {
             if (Objects.equals(n.getId(), obj.getName())) {
                 return true;
@@ -439,13 +439,13 @@ public class AdventureGameView {
      * Each node represents a different object.
      *
      * Images of each object are in the assets
-     * folders of the given adventure game.
+     * folders of the given game.
      */
     public void updateItems() {
 
         //write some code here to add images of objects in a given room to the objectsInRoom Vbox
-        List<AdventureObject> objectlist = this.model.getPlayer().getCurrentRoom().objectsInRoom;
-        for (AdventureObject obj: objectlist) {
+        List<GameObject> objectlist = this.model.getPlayer().getCurrentRoom().objectsInRoom;
+        for (GameObject obj: objectlist) {
             if (!nodeinvbox(obj, objectsInRoom)) {
                 String objimage = this.model.getDirectoryName() + "/objectImages/" + obj.getName() + ".jpg";
                 Image objimagefile = new Image(objimage);
@@ -463,8 +463,8 @@ public class AdventureGameView {
             }
         }
         //write some code here to add images of objects in a player's inventory room to the objectsInInventory Vbox
-        List<AdventureObject> invobjectlist = this.model.getPlayer().inventory;
-        for (AdventureObject invobj: invobjectlist) {
+        List<GameObject> invobjectlist = this.model.getPlayer().inventory;
+        for (GameObject invobj: invobjectlist) {
             if (!nodeinvbox(invobj, objectsInInventory)) {
                 String invobjimage = this.model.getDirectoryName() + "/objectImages/" + invobj.getName() + ".jpg";
                 Image invobjimagefile = new Image(invobjimage);
@@ -579,7 +579,7 @@ public class AdventureGameView {
     public void addSaveEvent() {
         saveButton.setOnAction(e -> {
             gridPane.requestFocus();
-            SaveView saveView = new SaveView(this);
+            SaveVisualizer saveVisualizer = new SaveVisualizer(this);
         });
     }
 
@@ -590,7 +590,7 @@ public class AdventureGameView {
     public void addLoadEvent() {
         loadButton.setOnAction(e -> {
             gridPane.requestFocus();
-            LoadView loadView = new LoadView(this);
+            LoadVisualizer loadVisualizer = new LoadVisualizer(this);
         });
     }
 
@@ -600,11 +600,11 @@ public class AdventureGameView {
      */
     public void articulateRoomDescription() {
         String musicFile;
-        String adventureName = this.model.getDirectoryName();
+        String gameName = this.model.getDirectoryName();
         String roomName = this.model.getPlayer().getCurrentRoom().getRoomName();
 
-        if (!this.model.getPlayer().getCurrentRoom().getVisited()) musicFile = "./" + adventureName + "/sounds/" + roomName.toLowerCase() + "-long.mp3" ;
-        else musicFile = "./" + adventureName + "/sounds/" + roomName.toLowerCase() + "-short.mp3" ;
+        if (!this.model.getPlayer().getCurrentRoom().getVisited()) musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-long.mp3" ;
+        else musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-short.mp3" ;
         musicFile = musicFile.replace(" ","-");
 
         Media sound = new Media(new File(musicFile).toURI().toString());

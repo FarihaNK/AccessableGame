@@ -16,13 +16,13 @@ public class Player implements Serializable {
     /**
      * The list of items that the player is carrying at the moment.
      */
-    public ArrayList<AdventureObject> inventory;
+    public ArrayList<GameObject> inventory;
 
     /**
-     * Adventure Game Player Constructor
+     * Accessable Game Player Constructor
      */
     public Player(Room currentRoom) {
-        this.inventory = new ArrayList<AdventureObject>();
+        this.inventory = new ArrayList<GameObject>();
         this.currentRoom = currentRoom;
     }
 
@@ -36,7 +36,7 @@ public class Player implements Serializable {
      */
     public boolean takeObject(String object){
         if(this.currentRoom.checkIfObjectInRoom(object)){
-            AdventureObject object1 = this.currentRoom.getObject(object);
+            GameObject object1 = this.currentRoom.getObject(object);
             this.currentRoom.removeGameObject(object1);
             this.addToInventory(object1);
             return true;
@@ -91,7 +91,7 @@ public class Player implements Serializable {
      *
      * @param object Prop or object to be added to the inventory.
      */
-    public void addToInventory(AdventureObject object) {
+    public void addToInventory(GameObject object) {
         this.inventory.add(object);
     }
 

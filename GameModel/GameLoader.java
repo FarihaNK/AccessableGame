@@ -5,23 +5,23 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Class AdventureLoader. Loads an adventure from files.
+ * Class GameLoader. Loads a game from files.
  */
 public class GameLoader {
 
-    private AdventureGame game; //the game to return
-    private String adventureName; //the name of the adventure
+    private AccessableGame game; //the game to return
+    private String gameName; //the name of the game
 
     /**
-     * Adventure Loader Constructor
+     * Game Loader Constructor
      * __________________________
      * Initializes attributes
      * @param game the game that is loaded
      * @param directoryName the directory in which game files live
      */
-    public AdventureLoader(AdventureGame game, String directoryName) {
+    public GameLoader(AccessableGame game, String directoryName) {
         this.game = game;
-        this.adventureName = directoryName;
+        this.gameName = directoryName;
     }
 
     /**
@@ -41,7 +41,7 @@ public class GameLoader {
 
         int roomNumber;
 
-        String roomFileName = this.adventureName + "/rooms.txt";
+        String roomFileName = this.gameName + "/rooms.txt";
         BufferedReader buff = new BufferedReader(new FileReader(roomFileName));
 
         while (buff.ready()) {
@@ -63,7 +63,7 @@ public class GameLoader {
             roomDescription += "\n";
 
             // now we make the room object
-            Room room = new Room(roomName, roomNumber, roomDescription, adventureName);
+            Room room = new Room(roomName, roomNumber, roomDescription, gameName);
 
             // now we make the motion table
             line = buff.readLine(); // reads the line after "-----"
@@ -75,10 +75,10 @@ public class GameLoader {
                     String[] blockedPath = dest.split("/");
                     String dest_part = blockedPath[0];
                     String object = blockedPath[1];
-                    Passage entry = new Passage(direction, dest_part, object);
+                    Path entry = new Path(direction, dest_part, object);
                     room.getMotionTable().addDirection(entry);
                 } else {
-                    Passage entry = new Passage(direction, dest);
+                    Path entry = new Path(direction, dest);
                     room.getMotionTable().addDirection(entry);
                 }
                 line = buff.readLine();
@@ -93,7 +93,7 @@ public class GameLoader {
      */
     public void parseObjects() throws IOException {
 
-        String objectFileName = this.adventureName + "/objects.txt";
+        String objectFileName = this.gameName + "/objects.txt";
         BufferedReader buff = new BufferedReader(new FileReader(objectFileName));
 
         while (buff.ready()) {
@@ -105,7 +105,7 @@ public class GameLoader {
                 System.out.println("Formatting Error!");
             int i = Integer.parseInt(objectLocation);
             Room location = this.game.getRooms().get(i);
-            AdventureObject object = new AdventureObject(objectName, objectDescription, location);
+            GameObject object = new GameObject(objectName, objectDescription, location);
             location.addGameObject(object);
         }
 
@@ -115,7 +115,7 @@ public class GameLoader {
      * Parse Synonyms File
      */
     public void parseSynonyms() throws IOException {
-        String synonymsFileName = this.adventureName + "/synonyms.txt";
+        String synonymsFileName = this.gameName + "/synonyms.txt";
         BufferedReader buff = new BufferedReader(new FileReader(synonymsFileName));
         String line = buff.readLine();
         while(line != null){
@@ -135,7 +135,7 @@ public class GameLoader {
      */
     public String parseOtherFile(String fileName) throws IOException {
         String text = "";
-        fileName = this.adventureName + "/" + fileName + ".txt";
+        fileName = this.gameName + "/" + fileName + ".txt";
         BufferedReader buff = new BufferedReader(new FileReader(fileName));
         String line = buff.readLine();
         while (line != null) { // while not EOF

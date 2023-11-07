@@ -1,17 +1,17 @@
-import AdventureModel.AdventureGame;
+import GameModel.AccessableGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import views.AdventureGameView;
+import views.GameVisualizer;
 
 import java.io.IOException;
 
 /**
- * Class AdventureGameApp.
+ * Class AccessableGameApp.
  */
-public class AdventureGameApp extends  Application {
+public class AccessableGameApp extends  Application {
 
-    AdventureGame model;
-    AdventureGameView view;
+    AccessableGame model;
+    GameVisualizer view;
 
     public static void main(String[] args) {
         launch(args);
@@ -24,8 +24,8 @@ public class AdventureGameApp extends  Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        this.model = new AdventureGame("TinyGame"); //change the name of the game if you want to try something bigger!
-        this.view = new AdventureGameView(model, primaryStage);
+        this.model = new AccessableGame("TinyGame"); //change the name of the game if you want to try something bigger!
+        this.view = new GameVisualizer(model, primaryStage);
     }
 
 }

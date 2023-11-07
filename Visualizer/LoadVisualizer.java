@@ -1,12 +1,12 @@
 package Visualizer;
 
-import AdventureModel.AdventureGame;
+import GameModel.AccessableGame;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.List;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -19,13 +19,13 @@ import java.util.List;
 
 
 /**
- * Class LoadView.
+ * Class LoadVisualizer.
  *
- * Loads Serialized adventure games.
+ * Loads Serialized games.
  */
-public class LoadView {
+public class LoadVisualizer {
 
-    private AdventureGameView adventureGameView;
+    private GameVisualizer gameVisualizer;
     private Label selectGameLabel;
     private Button selectGameButton;
     private Button closeWindowButton;
@@ -33,17 +33,17 @@ public class LoadView {
     private ListView<String> GameList;
     private String filename = null;
 
-    public LoadView(AdventureGameView adventureGameView){
+    public LoadVisualizer(GameVisualizer gameVisualizer){
 
-        //note that the buttons in this view are not accessible!!
-        this.adventureGameView = adventureGameView;
+        //note that the buttons in this visualizer are not accessible!!
+        this.gameVisualizer = gameVisualizer;
         selectGameLabel = new Label(String.format(""));
 
         GameList = new ListView<>(); //to hold all the file names
 
         final Stage dialog = new Stage(); //dialogue box
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(adventureGameView.stage);
+        dialog.initOwner(gameVisualizer.stage);
 
         VBox dialogVbox = new VBox(20);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
@@ -54,7 +54,7 @@ public class LoadView {
         getFiles(GameList); //get files for file selector
         selectGameButton = new Button("Change Game");
         selectGameButton.setId("ChangeGame"); // DO NOT MODIFY ID
-        AdventureGameView.makeButtonAccessible(selectGameButton, "select game", "This is the button to select a game", "Use this button to indicate a game file you would like to load.");
+        GameVisualizer.makeButtonAccessible(selectGameButton, "select game", "This is the button to select a game", "Use this button to indicate a game file you would like to load.");
 
         closeWindowButton = new Button("Close Window");
         closeWindowButton.setId("closeWindowButton"); // DO NOT MODIFY ID
@@ -62,7 +62,7 @@ public class LoadView {
         closeWindowButton.setPrefSize(200, 50);
         closeWindowButton.setFont(new Font(16));
         closeWindowButton.setOnAction(e -> dialog.close());
-        AdventureGameView.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the load game window", "Use this button to close the load game window.");
+        GameVisualizer.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the load game window", "Use this button to close the load game window.");
 
         //on selection, do something
         selectGameButton.setOnAction(e -> {
@@ -143,14 +143,14 @@ public class LoadView {
      * @param GameFile file to load
      * @return loaded Tetris Model
      */
-    public AdventureGame loadGame(String GameFile) throws IOException, ClassNotFoundException {
+    public AccessableGame loadGame(String GameFile) throws IOException, ClassNotFoundException {
         // Reading the object from a file
         FileInputStream file = null;
         ObjectInputStream in = null;
         try {
             file = new FileInputStream(GameFile);
             in = new ObjectInputStream(file);
-            return (AdventureGame) in.readObject();
+            return (AccessableGame) Game) in.readObject();
         } finally {
             if (in != null) {
                 in.close();

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Class AccessableGame.  Handles all the necessary tasks to run the Adventure game.
+ * Class AccessableGame.  Handles all the necessary tasks to run the game.
  */
 public class AccessableGame implements Serializable {
     private final String directoryName; //An attribute to store the Introductory text of the game.
@@ -15,11 +15,11 @@ public class AccessableGame implements Serializable {
     public Player player; //The Player of the game.
 
     /**
-     * Adventure Game Constructor
+     * Accessable Game Constructor
      * __________________________
      * Initializes attributes
      *
-     * @param name the name of the adventure
+     * @param name the name of the game
      */
     public AccessableGame(String name){
         this.synonyms = new HashMap<>();
@@ -56,7 +56,7 @@ public class AccessableGame implements Serializable {
     public void setUpGame() throws IOException {
 
         String directoryName = this.directoryName;
-        AdventureLoader loader = new AdventureLoader(this, directoryName);
+        GameLoader loader = new GameLoader(this, directoryName);
         loader.loadGame();
 
         // set up the player's current location
@@ -98,19 +98,19 @@ public class AccessableGame implements Serializable {
     public boolean movePlayer(String direction) {
 
         direction = direction.toUpperCase();
-        PassageTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
+        PathTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
         if (!motionTable.optionExists(direction)) return true; //no move
 
-        ArrayList<Passage> possibilities = new ArrayList<>();
-        for (Passage entry : motionTable.getDirection()) {
+        ArrayList<Path> possibilities = new ArrayList<>();
+        for (Path entry : motionTable.getDirection()) {
             if (entry.getDirection().equals(direction)) { //this is the right direction
                 possibilities.add(entry); // are there possibilities?
             }
         }
 
-        //try the blocked passages first
-        Passage chosen = null;
-        for (Passage entry : possibilities) {
+        //try the blocked paths first
+        Path chosen = null;
+        for (Path entry : possibilities) {
             System.out.println(entry.getIsBlocked());
             System.out.println(entry.getKeyName());
 
@@ -119,7 +119,7 @@ public class AccessableGame implements Serializable {
                     chosen = entry; //we can make it through, given our stuff
                     break;
                 }
-            } else { chosen = entry; } //the passage is unlocked
+            } else { chosen = entry; } //the path is unlocked
         }
 
         if (chosen == null) return true; //doh, we just can't move.
@@ -141,7 +141,7 @@ public class AccessableGame implements Serializable {
 
         String[] inputArray = tokenize(command); //look up synonyms
 
-        PassageTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
+        PathTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
 
         if (motionTable.optionExists(inputArray[0])) {
             if (!movePlayer(inputArray[0])) {

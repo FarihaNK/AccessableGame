@@ -1,4 +1,4 @@
-package GameeModel;
+package GameModel;
 
 import java.io.Serializable; //you will need this to save the game!
 
@@ -25,7 +25,7 @@ public class GameObject implements Serializable {
     private Room location = null;
 
     /**
-     * Adventure Object Constructor
+     * Game Object Constructor
      * ___________________________
      * This constructor sets the name, description, and location of the object.
      *
@@ -33,7 +33,7 @@ public class GameObject implements Serializable {
      * @param description One line description of the Object.
      * @param location The location of the Object in the game.
      */
-    public AdventureObject(String name, String description, Room location){
+    public GameObject(String name, String description, Room location){
         this.objectName = name;
         this.description = description;
         this.location = location;

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 /**
  * This class contains the information about a
- * room in the Adventure Game.
+ * room in the Accessable Game.
  */
 public class Room implements Serializable {
 
-    private final String adventureName;
+    private final String gameName;
     /**
      * The number of the room.
      */
@@ -26,14 +26,14 @@ public class Room implements Serializable {
     private String roomDescription;
 
     /**
-     * The passage table for the room.
+     * The path table for the room.
      */
-    private PassageTable motionTable = new PassageTable();
+    private PathTable motionTable = new PathTable();
 
     /**
      * The list of objects in the room.
      */
-    public ArrayList<AdventureObject> objectsInRoom = new ArrayList<AdventureObject>();
+    public ArrayList<GameObject> objectsInRoom = new ArrayList<GameObject>();
 
     /**
      * A boolean to store if the room has been visited or not
@@ -47,11 +47,11 @@ public class Room implements Serializable {
      * @param roomNumber: The number of the room.
      * @param roomDescription: The description of the room.
      */
-    public Room(String roomName, int roomNumber, String roomDescription, String adventureName){
+    public Room(String roomName, int roomNumber, String roomDescription, String gameName){
         this.roomName = roomName;
         this.roomNumber = roomNumber;
         this.roomDescription = roomDescription;
-        this.adventureName = adventureName;
+        this.gameName = gameName;
         this.isVisited = false;
     }
 
@@ -83,9 +83,9 @@ public class Room implements Serializable {
     public String getCommands() {
         //return null; //replace this!
         StringBuilder output = new StringBuilder();
-        for (int i = 0; i < this.motionTable.passageTable.size(); i++) {
+        for (int i = 0; i < this.motionTable.pathTable.size(); i++) {
             if (i != 0) {output.append(", ");}
-            output.append(this.motionTable.passageTable.get(i).getDirection().toUpperCase());
+            output.append(this.motionTable.pathTable.get(i).getDirection().toUpperCase());
         }
         return output.toString();
     }
@@ -95,7 +95,7 @@ public class Room implements Serializable {
      *
      * @param object to be added to the room.
      */
-    public void addGameObject(AdventureObject object){
+    public void addGameObject(GameObject object){
         this.objectsInRoom.add(object);
     }
 
@@ -104,7 +104,7 @@ public class Room implements Serializable {
      *
      * @param object to be removed from the room.
      */
-    public void removeGameObject(AdventureObject object){
+    public void removeGameObject(GameObject object){
         this.objectsInRoom.remove(object);
     }
 
@@ -129,12 +129,12 @@ public class Room implements Serializable {
     }
 
     /**
-     * Getter for returning an AdventureObject with a given name
+     * Getter for returning an GameObject with a given name
      *
      * @param objectName: Object name to find in the room
-     * @return: AdventureObject
+     * @return: GameObject
      */
-    public AdventureObject getObject(String objectName){
+    public GameObject getObject(String objectName){
         for(int i = 0; i<objectsInRoom.size();i++){
             if(this.objectsInRoom.get(i).getName().equals(objectName)) return this.objectsInRoom.get(i);
         }
@@ -185,7 +185,7 @@ public class Room implements Serializable {
      *
      * @return: motion table of the room
      */
-    public PassageTable getMotionTable(){
+    public PathTable getMotionTable(){
         return this.motionTable;
     }
 

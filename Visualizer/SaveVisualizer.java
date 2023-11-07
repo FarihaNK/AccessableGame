@@ -16,13 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Class SaveView.
+ * Class SaveVisualizer.
  *
- * Saves Serialized adventure games.
+ * Saves Serialized games.
  */
-public class SaveView {
+public class SaveVisualizer {
 
-    static String saveFileSuccess = "Saved Adventure Game!!";
+    static String saveFileSuccess = "Saved Accessable Game!!";
     static String saveFileExistsError = "Error: File already exists";
     static String saveFileNotSerError = "Error: File must end with .ser";
     private Label saveFileErrorLabel = new Label("");
@@ -31,16 +31,16 @@ public class SaveView {
     private Button saveGameButton = new Button("Save Game");
     private Button closeWindowButton = new Button("Close Window");
 
-    private AdventureGameView adventureGameView;
+    private GameVisualizer gameVisualizer;
 
     /**
      * Constructor
      */
-    public SaveView(AdventureGameView adventureGameView) {
-        this.adventureGameView = adventureGameView;
+    public SaveVisualizer(GameVisualizer gameVisualizer) {
+        this.gameVisualizer = gameVisualizer;
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(adventureGameView.stage);
+        dialog.initOwner(gameVisualizer.stage);
         VBox dialogVbox = new VBox(20);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
         dialogVbox.setStyle("-fx-background-color: #121212;");
@@ -62,7 +62,7 @@ public class SaveView {
         saveGameButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
         saveGameButton.setPrefSize(200, 50);
         saveGameButton.setFont(new Font(16));
-        AdventureGameView.makeButtonAccessible(saveGameButton, "save game", "This is a button to save the game", "Use this button to save the current game.");
+        GameVisualizer.makeButtonAccessible(saveGameButton, "save game", "This is a button to save the game", "Use this button to save the current game.");
         saveGameButton.setOnAction(e -> saveGame());
 
         closeWindowButton = new Button("Close Window");
@@ -71,7 +71,7 @@ public class SaveView {
         closeWindowButton.setPrefSize(200, 50);
         closeWindowButton.setFont(new Font(16));
         closeWindowButton.setOnAction(e -> dialog.close());
-        AdventureGameView.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the save game window", "Use this button to close the save game window.");
+        GameVisualizer.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the save game window", "Use this button to close the save game window.");
 
         VBox saveGameBox = new VBox(10, saveGameLabel, saveFileNameTextField, saveGameButton, saveFileErrorLabel, closeWindowButton);
         saveGameBox.setAlignment(Pos.CENTER);
@@ -101,7 +101,7 @@ public class SaveView {
         else if (!name.endsWith(".ser")) {saveFileErrorLabel.setText(saveFileNotSerError);}
         else {
             //load file
-            this.adventureGameView.model.saveModel(file);
+            this.gameVisualizer.model.saveModel(file);
             saveFileErrorLabel.setText(saveFileSuccess);}
 
     }
