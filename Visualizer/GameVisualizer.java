@@ -1,4 +1,4 @@
-package views;
+package Visualizer;
 
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
