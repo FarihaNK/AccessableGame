@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class GameLoader {
 
-    private AccessableGame game; //the game to return
+    private AccessibleGame game; //the game to return
     private String gameName; //the name of the game
 
     /**
@@ -19,7 +19,7 @@ public class GameLoader {
      * @param game the game that is loaded
      * @param directoryName the directory in which game files live
      */
-    public GameLoader(AccessableGame game, String directoryName) {
+    public GameLoader(AccessibleGame game, String directoryName) {
         this.game = game;
         this.gameName = directoryName;
     }

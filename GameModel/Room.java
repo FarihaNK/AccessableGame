@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /**
  * This class contains the information about a
- * room in the Accessable Game.
+ * room in the Accessible Game.
  */
 public class Room implements Serializable {
 

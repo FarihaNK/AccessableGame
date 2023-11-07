@@ -1,6 +1,6 @@
 package Visualizer;
 
-import GameModel.AccessableGame;
+import GameModel.AccessibleGame;
 import GameModel.GameObject;
 import GameModel.Path;
 import javafx.animation.PauseTransition;
@@ -44,7 +44,7 @@ import java.util.Stack;
  */
 public class GameVisualizer {
 
-    AccessableGame model; //model of the game
+    AccessibleGame model; //model of the game
     Stage stage; //stage on which all is rendered
     Button saveButton, loadButton, helpButton; //buttons
     Boolean helpToggle = false; //is help on display?
@@ -65,7 +65,7 @@ public class GameVisualizer {
      * __________________________
      * Initializes attributes
      */
-    public GameVisualizer(AccessableGame model, Stage stage) {
+    public GameVisualizer(AccessibleGame model, Stage stage) {
         this.model = model;
         this.stage = stage;
         intiUI();

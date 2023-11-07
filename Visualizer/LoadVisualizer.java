@@ -1,6 +1,6 @@
 package Visualizer;
 
-import GameModel.AccessableGame;
+import GameModel.AccessibleGame;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -127,6 +127,7 @@ public class LoadVisualizer {
         String selected = GameList.getSelectionModel().getSelectedItem();
         if (selected != null) {
             try{
+                gameVisualizer.stopArticulation();
                 String gamepath = "Games/Saved/" + selected;
                 loadGame(gamepath);
                 selectGameLabel.setText(selected);
@@ -143,14 +144,14 @@ public class LoadVisualizer {
      * @param GameFile file to load
      * @return loaded Tetris Model
      */
-    public AccessableGame loadGame(String GameFile) throws IOException, ClassNotFoundException {
+    public AccessibleGame loadGame(String GameFile) throws IOException, ClassNotFoundException {
         // Reading the object from a file
         FileInputStream file = null;
         ObjectInputStream in = null;
         try {
             file = new FileInputStream(GameFile);
             in = new ObjectInputStream(file);
-            return (AccessableGame) in.readObject();
+            return (AccessibleGame) in.readObject();
         } finally {
             if (in != null) {
                 in.close();

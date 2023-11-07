@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Class AccessableGame.  Handles all the necessary tasks to run the game.
  */
-public class AccessableGame implements Serializable {
+public class AccessibleGame implements Serializable {
     private final String directoryName; //An attribute to store the Introductory text of the game.
     private String helpText; //A variable to store the Help text of the game. This text is displayed when the user types "HELP" command.
     private final HashMap<Integer, Room> rooms; //A list of all the rooms in the game.
@@ -21,7 +21,7 @@ public class AccessableGame implements Serializable {
      *
      * @param name the name of the game
      */
-    public AccessableGame(String name){
+    public AccessibleGame(String name){
         this.synonyms = new HashMap<>();
         this.rooms = new HashMap<>();
         this.directoryName = "Games/" + name; //all games files are in the Games directory!
