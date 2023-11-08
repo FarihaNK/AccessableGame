@@ -64,7 +64,6 @@ public class Room implements Serializable {
      * @return delimited string of object descriptions
      */
     public String getObjectString() {
-        //return null; //replace this!
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < this.objectsInRoom.size(); i++) {
             if (i != 0) {output.append(", ");}
@@ -81,7 +80,6 @@ public class Room implements Serializable {
      * @return delimited string of possible moves
      */
     public String getCommands() {
-        //return null; //replace this!
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < this.motionTable.pathTable.size(); i++) {
             if (i != 0) {output.append(", ");}

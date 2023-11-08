@@ -5,8 +5,6 @@ import GameModel.GameObject;
 import GameModel.Path;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,14 +15,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
-import javafx.scene.input.KeyEvent; //you will need these!
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import javafx.event.EventHandler; //you will need this too!
+import javafx.event.EventHandler;
 import javafx.scene.AccessibleRole;
 
 import java.io.File;
@@ -36,9 +34,7 @@ import java.util.Stack;
 /**
  * Class GameVisualizer.
  *
- * This is the Class that will visualize your model.
- * You are asked to demo your visualization via a Zoom
- * recording. Place a link to your recording below.
+ * This is the Class that will visualize the model.
  *
  *
  */
@@ -235,7 +231,6 @@ public class GameVisualizer {
      * graph by invoking requestFocus method.
      */
     private void addTextHandlingEvent() {
-        //add your code here!
         inputTextField.addEventHandler(KeyEvent.KEY_RELEASED, (keyEvent) -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 String typed = inputTextField.getText().strip();
@@ -289,16 +284,12 @@ public class GameVisualizer {
         } else if (output.equals("FORCED")) {
             updateScene(model.getPlayer().getCurrentRoom().getRoomDescription());
             updateItems();
-            //write code here to handle "FORCED" events!
             PauseTransition pause = new PauseTransition(Duration.seconds(6));
             pause.setOnFinished(event -> {
                 submitEvent("FORCED");
             });
             pause.play();
             articulateRoomDescription();
-            //Your code will need to display the image in the
-            //current room and pause, then transition to
-            //the forced room.
         }
     }
 
@@ -312,7 +303,6 @@ public class GameVisualizer {
      * current room.
      */
     private void showCommands() {
-        //throw new UnsupportedOperationException("showCommands is not implemented!");
         StringBuilder commandstext = new StringBuilder();
         commandstext.append(roomDescLabel.getText());
         commandstext.append("\n\nThe possible moves for this room:\n");
@@ -422,10 +412,8 @@ public class GameVisualizer {
      * updateItems
      * __________________________
      *
-     * This method is partially completed, but you are asked to finish it off.
-     *
      * The method should populate the objectsInRoom and objectsInInventory Vboxes.
-     * Each Vbox should contain a collection of nodes (Buttons, ImageViews, you can decide)
+     * Each Vbox should contain a collection of nodes (Buttons, ImageViews)
      * Each node represents a different object.
      *
      * Images of each object are in the assets
@@ -433,7 +421,6 @@ public class GameVisualizer {
      */
     public void updateItems() {
 
-        //write some code here to add images of objects in a given room to the objectsInRoom Vbox
         List<GameObject> objectlist = this.model.getPlayer().getCurrentRoom().objectsInRoom;
         objectsInRoom.getChildren().clear();
         for (GameObject obj: objectlist) {
@@ -451,7 +438,6 @@ public class GameVisualizer {
                     "This is the " + obj.getName() + "object. Click it to add it to your inventory.");
             addObjectButtonEvent(imagebutton);
         }
-        //write some code here to add images of objects in a player's inventory room to the objectsInInventory Vbox
         List<GameObject> invobjectlist = this.model.getPlayer().inventory;
         objectsInInventory.getChildren().clear();
         for (GameObject invobj: invobjectlist) {
@@ -469,7 +455,7 @@ public class GameVisualizer {
                     "This is the " + invobj.getName() + "object. Click it to add it to your inventory.");
             addObjectButtonEvent(invimagebutton);
         }
-        //please use setAccessibleText to add "alt" descriptions to your images!
+        //use setAccessibleText to add "alt" descriptions to your images!
         //the path to the image of any is as follows:
         //this.model.getDirectoryName() + "/objectImages/" + objectName + ".jpg";
 
@@ -502,7 +488,6 @@ public class GameVisualizer {
      * -- Again, REMOVE whatever nodes are within the cell beforehand!
      */
     public void showInstructions() {
-        //throw new UnsupportedOperationException("showInstructions is not implemented!");
         if (this.helpToggle) {
             List<Node> original = null;
             if (!this.oldcellcontents.empty()) {

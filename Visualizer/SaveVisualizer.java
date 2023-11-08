@@ -92,7 +92,6 @@ public class SaveVisualizer {
      * Otherwise, load the file and set the saveFileErrorLabel to the text in saveFileSuccess
      */
     private void saveGame() {
-        //throw new UnsupportedOperationException("saveGame is not implemented!");
         TextField tfeild = saveFileNameTextField;
         String name = tfeild.getText();
         File dir = new File("Games/Saved");

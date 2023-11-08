@@ -14,8 +14,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -97,7 +95,6 @@ public class LoadVisualizer {
      * @param listView the ListView containing all the .ser files in the Games/Saved directory.
      */
     private void getFiles(ListView<String> listView) {
-        //throw new UnsupportedOperationException("getFiles is not implemented");
         File dir = new File("Games/Saved");
         if (!dir.isDirectory() || !dir.exists()) {
             dir.mkdirs();
@@ -123,7 +120,6 @@ public class LoadVisualizer {
      */
     private void selectGame(Label selectGameLabel, ListView<String> GameList) throws IOException {
         //saved games will be in the Games/Saved folder!
-        //throw new UnsupportedOperationException("selectGame is not implemented");
         String selected = GameList.getSelectionModel().getSelectedItem();
         gameVisualizer.stopArticulation();
         if (selected != null) {
