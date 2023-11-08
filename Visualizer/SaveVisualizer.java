@@ -22,7 +22,7 @@ import java.util.Date;
  */
 public class SaveVisualizer {
 
-    static String saveFileSuccess = "Saved Accessable Game!!";
+    static String saveFileSuccess = "Saved Accessible Game!!";
     static String saveFileExistsError = "Error: File already exists";
     static String saveFileNotSerError = "Error: File must end with .ser";
     private Label saveFileErrorLabel = new Label("");
@@ -95,12 +95,14 @@ public class SaveVisualizer {
         //throw new UnsupportedOperationException("saveGame is not implemented!");
         TextField tfeild = saveFileNameTextField;
         String name = tfeild.getText();
-        String filePath = "Games/Saved/" + name;
-        File file = new File(filePath);
+        File dir = new File("Games/Saved");
+        if (!dir.isDirectory() || !dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File("Games/Saved/" + name);
         if (file.exists()) {saveFileErrorLabel.setText(saveFileExistsError);}
         else if (!name.endsWith(".ser")) {saveFileErrorLabel.setText(saveFileNotSerError);}
         else {
-            //load file
             this.gameVisualizer.model.saveModel(file);
             saveFileErrorLabel.setText(saveFileSuccess);}
 

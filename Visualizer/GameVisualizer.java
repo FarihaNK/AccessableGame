@@ -61,7 +61,7 @@ public class GameVisualizer {
     private boolean mediaPlaying; //to know if the audio is playing
 
     /**
-     * Accessable Game View Constructor
+     * Accessible Game View Constructor
      * __________________________
      * Initializes attributes
      */
@@ -77,7 +77,7 @@ public class GameVisualizer {
     public void intiUI() {
 
         // setting up the stage
-        this.stage.setTitle("My Accessable Game"); //Replace <YOUR UTORID> with your UtorID
+        this.stage.setTitle("My Accessible Game");
 
         //Inventory + Room items
         objectsInInventory.setSpacing(10);
@@ -416,17 +416,6 @@ public class GameVisualizer {
         });
     }
 
-    /** Helper Method
-     * This method returns true if the image button already exists in the VBox
-     */
-    private boolean nodeinvbox(GameObject obj, VBox section) {
-        for (Node n: section.getChildren()) {
-            if (Objects.equals(n.getId(), obj.getName())) {
-                return true;
-            }
-        } return false;
-    }
-
     /**
      * updateItems
      * __________________________
@@ -444,41 +433,39 @@ public class GameVisualizer {
 
         //write some code here to add images of objects in a given room to the objectsInRoom Vbox
         List<GameObject> objectlist = this.model.getPlayer().getCurrentRoom().objectsInRoom;
+        objectsInRoom.getChildren().clear();
         for (GameObject obj: objectlist) {
-            if (!nodeinvbox(obj, objectsInRoom)) {
-                String objimage = this.model.getDirectoryName() + "/objectImages/" + obj.getName() + ".jpg";
-                Image objimagefile = new Image(objimage);
-                ImageView objimageview = new ImageView(objimagefile);
-                objimageview.setFitWidth(100);
-                Button imagebutton = new Button();
-                imagebutton.setGraphic(objimageview);
-                imagebutton.setId(obj.getName());
-                if (nodeinvbox(obj, objectsInInventory)) {
-                    objectsInInventory.getChildren().removeIf(n -> Objects.equals(n.getId(), obj.getName()));}
-                objectsInRoom.getChildren().add(imagebutton);
-                makeButtonAccessible(imagebutton, obj.getName(), obj.getDescription(),
-                        "This is the " + obj.getName() + "object. Click it to add it to your inventory.");
-                addObjectButtonEvent(imagebutton);
-            }
+            String objimage = this.model.getDirectoryName() + "/objectImages/" + obj.getName() + ".jpg";
+            Image objimagefile = new Image(objimage);
+            ImageView objimageview = new ImageView(objimagefile);
+            objimageview.setFitWidth(100);
+            objimageview.setPreserveRatio(true);
+            Button imagebutton = new Button();
+            imagebutton.setGraphic(objimageview);
+            imagebutton.setId(obj.getName());
+            objectsInInventory.getChildren().removeIf(n -> Objects.equals(n.getId(), obj.getName()));
+            objectsInRoom.getChildren().add(imagebutton);
+            makeButtonAccessible(imagebutton, obj.getName(), obj.getDescription(),
+                    "This is the " + obj.getName() + "object. Click it to add it to your inventory.");
+            addObjectButtonEvent(imagebutton);
         }
         //write some code here to add images of objects in a player's inventory room to the objectsInInventory Vbox
         List<GameObject> invobjectlist = this.model.getPlayer().inventory;
+        objectsInInventory.getChildren().clear();
         for (GameObject invobj: invobjectlist) {
-            if (!nodeinvbox(invobj, objectsInInventory)) {
-                String invobjimage = this.model.getDirectoryName() + "/objectImages/" + invobj.getName() + ".jpg";
-                Image invobjimagefile = new Image(invobjimage);
-                ImageView invobjimageview = new ImageView(invobjimagefile);
-                invobjimageview.setFitWidth(100);
-                Button invimagebutton = new Button();
-                invimagebutton.setGraphic(invobjimageview);
-                invimagebutton.setId(invobj.getName());
-                if (nodeinvbox(invobj, objectsInRoom)) {
-                    objectsInRoom.getChildren().removeIf(n -> Objects.equals(n.getId(), invobj.getName()));}
-                objectsInInventory.getChildren().add(invimagebutton);
-                makeButtonAccessible(invimagebutton, invobj.getName(), invobj.getDescription(),
-                        "This is the " + invobj.getName() + "object. Click it to add it to your inventory.");
-                addObjectButtonEvent(invimagebutton);
-            }
+            String invobjimage = this.model.getDirectoryName() + "/objectImages/" + invobj.getName() + ".jpg";
+            Image invobjimagefile = new Image(invobjimage);
+            ImageView invobjimageview = new ImageView(invobjimagefile);
+            invobjimageview.setFitWidth(100);
+            invobjimageview.setPreserveRatio(true);
+            Button invimagebutton = new Button();
+            invimagebutton.setGraphic(invobjimageview);
+            invimagebutton.setId(invobj.getName());
+            objectsInRoom.getChildren().removeIf(n -> Objects.equals(n.getId(), invobj.getName()));
+            objectsInInventory.getChildren().add(invimagebutton);
+            makeButtonAccessible(invimagebutton, invobj.getName(), invobj.getDescription(),
+                    "This is the " + invobj.getName() + "object. Click it to add it to your inventory.");
+            addObjectButtonEvent(invimagebutton);
         }
         //please use setAccessibleText to add "alt" descriptions to your images!
         //the path to the image of any is as follows:

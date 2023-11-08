@@ -125,17 +125,23 @@ public class LoadVisualizer {
         //saved games will be in the Games/Saved folder!
         //throw new UnsupportedOperationException("selectGame is not implemented");
         String selected = GameList.getSelectionModel().getSelectedItem();
+        gameVisualizer.stopArticulation();
         if (selected != null) {
             try{
-                gameVisualizer.stopArticulation();
                 String gamepath = "Games/Saved/" + selected;
-                loadGame(gamepath);
+                AccessibleGame g = loadGame(gamepath);
+                this.gameVisualizer = new GameVisualizer(g, gameVisualizer.stage);
                 selectGameLabel.setText(selected);
-            } catch (ClassNotFoundException e) {selectGameLabel.setText("New Game Created");}
+            } catch (ClassNotFoundException e) {throw new IOException();}
         }
         else {
-            selectGameLabel.setText("New Game Created");}
-        //START GAME FROM SCRATCH
+            selectGameLabel.setText("New Game Created");
+            try{
+                AccessibleGame g = loadGame("Games/TinyGame");
+                this.gameVisualizer = new GameVisualizer(g, gameVisualizer.stage);
+                selectGameLabel.setText("New Game Created");
+            } catch (ClassNotFoundException e) {throw new IOException();}
+        }
     }
 
     /**
