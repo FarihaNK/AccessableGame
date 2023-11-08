@@ -287,13 +287,15 @@ public class GameVisualizer {
             });
             pause.play();
         } else if (output.equals("FORCED")) {
+            updateScene(model.getPlayer().getCurrentRoom().getRoomDescription());
+            updateItems();
             //write code here to handle "FORCED" events!
-            this.model.interpretAction(output);
-            updateScene(output);
-            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            PauseTransition pause = new PauseTransition(Duration.seconds(6));
             pause.setOnFinished(event -> {
-                //Platform.exit();
+                submitEvent("FORCED");
             });
+            pause.play();
+            articulateRoomDescription();
             //Your code will need to display the image in the
             //current room and pause, then transition to
             //the forced room.
