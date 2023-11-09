@@ -2,9 +2,12 @@ package CreatorModel;
 
 import GameModel.AccessibleGame;
 import Visualizer.GameVisualizer;
+import javafx.scene.AccessibleRole;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -12,6 +15,9 @@ import javafx.stage.Stage;
 
 public class GameCreator {
     Stage stage;
+    TextField rNumber;
+    int numRooms;
+    Label rNumberLabel;
 
     public GameCreator(Stage stage) {
         this.stage = stage;
@@ -76,14 +82,50 @@ public class GameCreator {
         gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 17px;"));
         gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;"));
         gameButton.setOnAction(event -> {
-            creatingPage();
+            creatingrNumberPage();
         });
     }
 
-    public void creatingPage() {
+    public void creatingrNumberPage() {
         Group root2 = new Group();
         Scene scene2 = new Scene(root2, Color.DARKGREEN);
+
+        Text text = new Text("How many rooms?");
+        text.setX(175);
+        text.setY(170);
+        text.setFont(Font.font("Arial", 30));
+        text.setFill(Color.WHITE);
+        root2.getChildren().add(text);
+
+        this.rNumberLabel = new Label("You can have a maximum of 20 and a minimum of 2 rooms.");
+        rNumberLabel.setLayoutX(110);
+        rNumberLabel.setLayoutY(220);
+        rNumberLabel.setFont(Font.font("Arial", 15));
+        rNumberLabel.setTextFill(Color.WHITE);
+        root2.getChildren().add(rNumberLabel);
+
+        this.rNumber = new TextField();
+        root2.getChildren().add(rNumber);
+        rNumber.setAccessibleRole(AccessibleRole.TEXT_AREA);
+        rNumber.setFont(new Font("Arial", 16));
+        rNumber.setFocusTraversable(true);
+        rNumber.setLayoutX(250);
+        rNumber.setLayoutY(300);
+        rNumber.setPrefWidth(100);
+        rNumber.setPrefHeight(45);
+        rNumberTextHandling();
+
         stage.setScene(scene2);
+    }
+
+    public void rNumberTextHandling() {
+        rNumber.setOnAction(event -> {
+            try {
+                int output = Integer.parseInt(rNumber.getText());
+                if (2 <= output & output <= 20) {numRooms = output;}
+                else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
+            } catch (Exception e) {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
+        });
     }
 
 }
