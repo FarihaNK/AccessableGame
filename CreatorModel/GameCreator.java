@@ -3,10 +3,12 @@ package CreatorModel;
 import GameModel.AccessibleGame;
 import Visualizer.GameVisualizer;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.AccessibleRole;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -224,47 +226,50 @@ public class GameCreator {
     }
 
     public void pathInfoPage() {
-        Group root4 = new Group();
+        VBox root4 = new VBox();
+        root4.setAlignment(Pos.CENTER);
+        root4.setSpacing(20);
 
-        double y = 50;
-
-        for (int i=1; i<=numRooms; i++) {
+        for (int i = 1; i <= numRooms; i++) {
             Text text = new Text("Room " + i);
-            text.setX(220);
-            text.setY(y);
             text.setFont(Font.font("Arial", 15));
             text.setFill(Color.BLACK);
-            root4.getChildren().add(text);
-            y += 20;
 
-            for (int k=0; k < Integer.parseInt(tempinfo.get(3*i - 1)); k++) {
+            VBox roomContainer = new VBox();
+            roomContainer.setAlignment(Pos.CENTER);
+            roomContainer.setSpacing(10);
+            roomContainer.getChildren().add(text);
+
+            for (int k = 0; k < Integer.parseInt(tempinfo.get(3 * i - 1)); k++) {
+                HBox row = new HBox();
+                row.setAlignment(Pos.CENTER);
+                row.setSpacing(20);
+
                 TextField p = new TextField();
-                root4.getChildren().add(p);
                 p.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 p.setFont(new Font("Arial", 15));
                 p.setFocusTraversable(true);
-                p.setLayoutX(150);
-                p.setLayoutY(y);
                 p.setPrefWidth(100);
                 p.setPrefHeight(45);
 
                 TextField q = new TextField();
-                root4.getChildren().add(q);
                 q.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 q.setFont(new Font("Arial", 15));
                 q.setFocusTraversable(true);
-                q.setLayoutX(300);
-                q.setLayoutY(y);
                 q.setPrefWidth(100);
                 q.setPrefHeight(45);
 
-                y += 70;
+                row.getChildren().addAll(p, q);
+                roomContainer.getChildren(). add(row);
             }
+
+            root4.getChildren().add(roomContainer);
         }
+
         ScrollPane scrollPane = new ScrollPane(root4);
-        scrollPane.setPadding(new Insets(0, 0, 100, 100));
         scrollPane.setFitToWidth(true);
         stage.setScene(new Scene(scrollPane, Color.WHITE));
     }
+
 
 }
