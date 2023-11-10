@@ -5,10 +5,7 @@ import Visualizer.GameVisualizer;
 import javafx.scene.AccessibleRole;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -139,7 +136,7 @@ public class GameCreator {
         Group root3 = new Group();
         Scene scene3 = new Scene(root3, Color.WHITE);
 
-        Text text = new Text("Room " + numRooms);
+        Text text = new Text("Room " + (x+1));
         text.setX(220);
         text.setY(50);
         text.setFont(Font.font("Arial", 20));
@@ -207,17 +204,67 @@ public class GameCreator {
         root3.getChildren().add(submitInfoButton);
 
         submitInfoButton.setOnAction(event -> {
-            if (x < numRooms) {
+            if (x < numRooms - 1) {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
                 rInfoPage(x+1);
             }
-            else {System.out.println("DONE");} //continue here!
+            else {
+                tempinfo.add(roomName.getText());
+                tempinfo.add(roomDescription.getText());
+                tempinfo.add(numPaths.getText());
+                System.out.println("DONE");
+                pathInfoPage();}
         });
 
         stage.setScene(scene3);
     }
 
+    public void pathInfoPage() {
+        Group root4 = new Group();
+        Scene scene4 = new Scene(root4, Color.WHITE);
+        ScrollPane sp = new ScrollPane(root4);
+        sp.setStyle("-fx-background: #000000; -fx-background-color:transparent;");
+        sp.setFitToWidth(true);
+
+        double y = 50;
+
+        for (int i=1; i<=numRooms; i++) {
+            Text text = new Text("Room " + i);
+            text.setX(220);
+            text.setY(y);
+            text.setFont(Font.font("Arial", 15));
+            text.setFill(Color.BLACK);
+            root4.getChildren().add(text);
+            y += 20;
+
+            for (int k=0; k < Integer.parseInt(tempinfo.get(3*i - 1)); k++) {
+                TextField p = new TextField();
+                root4.getChildren().add(p);
+                p.setAccessibleRole(AccessibleRole.TEXT_AREA);
+                p.setFont(new Font("Arial", 15));
+                p.setFocusTraversable(true);
+                p.setLayoutX(150);
+                p.setLayoutY(y);
+                p.setPrefWidth(100);
+                p.setPrefHeight(45);
+
+                TextField q = new TextField();
+                root4.getChildren().add(q);
+                q.setAccessibleRole(AccessibleRole.TEXT_AREA);
+                q.setFont(new Font("Arial", 15));
+                q.setFocusTraversable(true);
+                q.setLayoutX(300);
+                q.setLayoutY(y);
+                q.setPrefWidth(100);
+                q.setPrefHeight(45);
+
+                y += 70;
+            }
+        }
+
+        stage.setScene(scene4);
+    }
 
 }
