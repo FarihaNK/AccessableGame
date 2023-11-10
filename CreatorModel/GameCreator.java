@@ -2,10 +2,12 @@ package CreatorModel;
 
 import GameModel.AccessibleGame;
 import Visualizer.GameVisualizer;
+import javafx.geometry.Insets;
 import javafx.scene.AccessibleRole;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -223,10 +225,6 @@ public class GameCreator {
 
     public void pathInfoPage() {
         Group root4 = new Group();
-        Scene scene4 = new Scene(root4, Color.WHITE);
-        ScrollPane sp = new ScrollPane(root4);
-        sp.setStyle("-fx-background: #000000; -fx-background-color:transparent;");
-        sp.setFitToWidth(true);
 
         double y = 50;
 
@@ -263,8 +261,10 @@ public class GameCreator {
                 y += 70;
             }
         }
-
-        stage.setScene(scene4);
+        ScrollPane scrollPane = new ScrollPane(root4);
+        scrollPane.setPadding(new Insets(0, 0, 100, 100));
+        scrollPane.setFitToWidth(true);
+        stage.setScene(new Scene(scrollPane, Color.WHITE));
     }
 
 }
