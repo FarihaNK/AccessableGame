@@ -107,7 +107,7 @@ public class GameCreator {
 
         this.rNumberLabel = new Label("You can have a maximum of 20 and a minimum of 2 rooms.");
         rNumberLabel.setLayoutX(110);
-        rNumberLabel.setLayoutY(220);
+        rNumberLabel.setLayoutY(200);
         rNumberLabel.setFont(Font.font("Arial", 15));
         rNumberLabel.setTextFill(Color.WHITE);
         root2.getChildren().add(rNumberLabel);
@@ -121,19 +121,29 @@ public class GameCreator {
         rNumber.setLayoutY(300);
         rNumber.setPrefWidth(100);
         rNumber.setPrefHeight(45);
-        rNumberTextHandling();
+
+        Button submitroom = new Button("Submit");
+        submitroom.setLayoutX(200);
+        submitroom.setLayoutY(400);
+        submitroom.setPrefWidth(200);
+        submitroom.setPrefHeight(60);
+        submitroom.setStyle("-fx-background-color: #003300; -fx-text-fill: white; -fx-font-size: 17px;");
+        root2.getChildren().add(submitroom);
+        subroomButtonHandler(submitroom);
 
         stage.setScene(scene2);
     }
 
-    public void rNumberTextHandling() {
-        rNumber.setOnAction(event -> {
-            try {
-                int output = Integer.parseInt(rNumber.getText());
-                if (2 <= output & output <= 20) {numRooms = output; rInfoPage(0);}
-                else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
-            } catch (Exception e) {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
-        });
+    public void subroomButtonHandler(Button button) {
+            button.setOnMousePressed(event -> button.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 17px;"));
+            button.setOnMouseReleased(event -> button.setStyle("-fx-background-color: #003300; -fx-text-fill: white; -fx-font-size: 17px;"));
+            button.setOnAction(event -> {
+                try {
+                    int output = Integer.parseInt(rNumber.getText());
+                    if (2 <= output & output <= 20) {numRooms = output; rInfoPage(0);}
+                    else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
+                } catch (Exception e) {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
+            });
     }
 
     public void rInfoPage(int x){
