@@ -143,8 +143,11 @@ public class GameCreator {
                 try {
                     int output = Integer.parseInt(rNumber.getText());
                     if (2 <= output & output <= 20) {numRooms = output; rInfoPage(0);}
-                    else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
-                } catch (Exception e) {rNumberLabel.setText("Error: Choose a number between 2 and 20.");}
+                    else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");
+                        rNumberLabel.setTextFill(Color.ORANGE);}
+                } catch (Exception e) {
+                    rNumberLabel.setText("Error: Choose a number between 2 and 20.");
+                    rNumberLabel.setTextFill(Color.ORANGE);}
             });
     }
 
@@ -161,6 +164,13 @@ public class GameCreator {
         text.setFont(Font.font("Arial", 20));
         text.setFill(Color.BLACK);
         root3.getChildren().add(text);
+
+        Label pathLabel = new Label("Room Name and Number of Paths categories are required. " +
+                "Number of paths must be an integer.");
+        pathLabel.setFont(Font.font("Arial", 15));
+        pathLabel.setWrapText(true);
+        pathLabel.setTextFill(Color.BLACK);
+        root3.getChildren().add(pathLabel);
 
         Text text2 = new Text("Room Name");
         text2.setFont(Font.font("Arial", 20));
@@ -234,9 +244,10 @@ public class GameCreator {
             objbutton[i].setPrefHeight(30);
             objbutton[i].setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 12px;");
             fp.getChildren().add(objbutton[i]);
-            objbutton[i].setOnAction(event -> {obj.put(k, true);});
+            objbutton[i].setOnAction(event -> obj.put(k, true));
             int finalI = i;
-            objbutton[i].setOnMousePressed(event -> objbutton[finalI].setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 12px;"));
+            objbutton[i].setOnMousePressed(event -> objbutton[finalI].setStyle("-fx-background-color: orange;" +
+                    " -fx-text-fill: black; -fx-font-size: 12px;"));
             i++;
         }
         root3.getChildren().add(fp);
@@ -248,7 +259,7 @@ public class GameCreator {
         root3.getChildren().add(submitInfoButton);
 
         submitInfoButton.setOnAction(event -> {
-            if (x < numRooms - 1) {
+            try{if (x < numRooms - 1) {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
@@ -260,9 +271,10 @@ public class GameCreator {
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
                 tempinfo.add(obj.toString());
-                System.out.println("DONE");
-                System.out.println(tempinfo);
                 pathInfoPage();}
+            } catch (Exception e) {pathLabel.setText("Error: Room Name and Number of Paths " +
+                    "categories are required. Number of Paths must be an integer.");
+                pathLabel.setTextFill(Color.ORANGE);}
         });
 
         stage.setScene(scene3);
@@ -272,10 +284,11 @@ public class GameCreator {
         VBox root4 = new VBox();
         root4.setAlignment(Pos.CENTER);
         root4.setSpacing(20);
+        root4.setPadding(new Insets(50,0,50,0));
 
         for (int i = 1; i <= numRooms; i++) {
             Text text = new Text("Room " + i + " Paths");
-            text.setFont(Font.font("Arial", 15));
+            text.setFont(Font.font("Arial", 20));
             text.setFill(Color.BLACK);
 
             VBox roomContainer = new VBox();
