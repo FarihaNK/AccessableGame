@@ -292,7 +292,7 @@ public class GameCreator {
                 p.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 p.setFont(new Font("Arial", 15));
                 p.setFocusTraversable(true);
-                p.setPrefWidth(100);
+                p.setPrefWidth(140);
                 p.setPrefHeight(45);
 
                 Text arrow = new Text("→");
@@ -305,8 +305,23 @@ public class GameCreator {
                 q.setPrefWidth(100);
                 q.setPrefHeight(45);
 
-                row.getChildren().addAll(p, arrow, q);
-                roomContainer.getChildren(). add(row);
+                Button blockedbutton = new Button("Unblocked");
+                blockedbutton.setPrefWidth(80);
+                blockedbutton.setPrefHeight(45);
+                blockedbutton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 12px;");
+                TextField blocking = new TextField("Object");
+                blocking.setAccessibleRole(AccessibleRole.TEXT_AREA);
+                blocking.setFont(new Font("Arial", 15));
+                blocking.setFocusTraversable(true);
+                blocking.setPrefWidth(80);
+                blocking.setPrefHeight(45);
+                blockedbutton.setOnAction(event -> row.getChildren().add(blocking));
+                blockedbutton.setOnMousePressed(event -> {
+                    blockedbutton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 12px;");
+                    blockedbutton.setText("Blocked");});
+
+                row.getChildren().addAll(p, arrow, q, blockedbutton);
+                roomContainer.getChildren().add(row);
             }
 
             root4.getChildren().add(roomContainer);
