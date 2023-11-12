@@ -8,6 +8,7 @@ import javafx.scene.AccessibleRole;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameCreator {
     Stage stage;
@@ -26,7 +28,7 @@ public class GameCreator {
     TextField roomName;
     TextArea roomDescription;
     TextField numPaths;
-
+    HashMap<String, Boolean> obj = new HashMap<>();
     public GameCreator(Stage stage) {
         this.stage = stage;
         runUI();
@@ -147,19 +149,20 @@ public class GameCreator {
     }
 
     public void rInfoPage(int x){
-        Group root3 = new Group();
-        Scene scene3 = new Scene(root3, Color.WHITE);
+        VBox root3 = new VBox();
+        root3.setAlignment(Pos.CENTER);
+        root3.setSpacing(20);
+        root3.setPadding(new Insets(50,100,0,100));
+        ScrollPane scrollPane = new ScrollPane(root3);
+        scrollPane.setFitToWidth(true);
+        Scene scene3 = new Scene(scrollPane, Color.WHITE);
 
-        Text text = new Text("Room " + (x+1));
-        text.setX(220);
-        text.setY(50);
+        Text text = new Text("ROOM " + (x+1));
         text.setFont(Font.font("Arial", 20));
         text.setFill(Color.BLACK);
         root3.getChildren().add(text);
 
         Text text2 = new Text("Room Name");
-        text2.setX(220);
-        text2.setY(100);
         text2.setFont(Font.font("Arial", 20));
         text2.setFill(Color.BLACK);
         root3.getChildren().add(text2);
@@ -169,14 +172,10 @@ public class GameCreator {
         roomName.setAccessibleRole(AccessibleRole.TEXT_AREA);
         roomName.setFont(new Font("Arial", 15));
         roomName.setFocusTraversable(true);
-        roomName.setLayoutX(150);
-        roomName.setLayoutY(120);
         roomName.setPrefWidth(300);
         roomName.setPrefHeight(45);
 
         Text text3 = new Text("Room Description");
-        text3.setX(220);
-        text3.setY(210);
         text3.setFont(Font.font("Arial", 20));
         text3.setFill(Color.BLACK);
         root3.getChildren().add(text3);
@@ -186,15 +185,11 @@ public class GameCreator {
         roomDescription.setAccessibleRole(AccessibleRole.TEXT_AREA);
         roomDescription.setFont(new Font("Arial", 15));
         roomDescription.setFocusTraversable(true);
-        roomDescription.setLayoutX(150);
-        roomDescription.setLayoutY(240);
         roomDescription.setPrefWidth(300);
         roomDescription.setPrefHeight(150);
 
 
         Text text4 = new Text("Number of Paths");
-        text4.setX(220);
-        text4.setY(430);
         text4.setFont(Font.font("Arial", 20));
         text4.setFill(Color.BLACK);
         root3.getChildren().add(text4);
@@ -204,14 +199,49 @@ public class GameCreator {
         numPaths.setAccessibleRole(AccessibleRole.TEXT_AREA);
         numPaths.setFont(new Font("Arial", 15));
         numPaths.setFocusTraversable(true);
-        numPaths.setLayoutX(150);
-        numPaths.setLayoutY(460);
         numPaths.setPrefWidth(300);
         numPaths.setPrefHeight(45);
 
+        Text text5 = new Text("Objects");
+        text5.setFont(Font.font("Arial", 20));
+        text5.setFill(Color.BLACK);
+        root3.getChildren().add(text5);
+
+        obj.put("BIRD", false);
+        obj.put("BOOK", false);
+        obj.put("CHEST", false);
+        obj.put("COINS", false);
+        obj.put("DIAMOND", false);
+        obj.put("EGGS", false);
+        obj.put("EMERALD", false);
+        obj.put("KEYS", false);
+        obj.put("LAMP", false);
+        obj.put("NUGGET", false);
+        obj.put("PLANT", false);
+        obj.put("ROD", false);
+        obj.put("WATER", false);
+
+        Button[] objbutton = new Button[13];
+        FlowPane fp = new FlowPane();
+        fp.setAlignment(Pos.CENTER);
+        fp.setHgap(10);
+        fp.setVgap(10);
+        int i = 0;
+        for (String k: obj.keySet()) {
+            objbutton[i] = new Button(k);
+            objbutton[i].setId(k);
+            objbutton[i].setPrefWidth(80);
+            objbutton[i].setPrefHeight(30);
+            objbutton[i].setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 12px;");
+            fp.getChildren().add(objbutton[i]);
+            objbutton[i].setOnAction(event -> {obj.put(k, true);});
+            int finalI = i;
+            objbutton[i].setOnMousePressed(event -> objbutton[finalI].setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 12px;"));
+            i++;
+        }
+        root3.getChildren().add(fp);
+
         Button submitInfoButton = new Button("Submit");
-        submitInfoButton.setLayoutX(200);
-        submitInfoButton.setLayoutY(520);
         submitInfoButton.setPrefWidth(200);
         submitInfoButton.setPrefHeight(40);
         submitInfoButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 20px;");
@@ -222,13 +252,16 @@ public class GameCreator {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
+                tempinfo.add(obj.toString());
                 rInfoPage(x+1);
             }
             else {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
+                tempinfo.add(obj.toString());
                 System.out.println("DONE");
+                System.out.println(tempinfo);
                 pathInfoPage();}
         });
 
@@ -241,7 +274,7 @@ public class GameCreator {
         root4.setSpacing(20);
 
         for (int i = 1; i <= numRooms; i++) {
-            Text text = new Text("Room " + i);
+            Text text = new Text("Room " + i + " Paths");
             text.setFont(Font.font("Arial", 15));
             text.setFill(Color.BLACK);
 
@@ -250,26 +283,29 @@ public class GameCreator {
             roomContainer.setSpacing(10);
             roomContainer.getChildren().add(text);
 
-            for (int k = 0; k < Integer.parseInt(tempinfo.get(3 * i - 1)); k++) {
+            for (int k = 0; k < Integer.parseInt(tempinfo.get(4 * i - 2)); k++) {
                 HBox row = new HBox();
                 row.setAlignment(Pos.CENTER);
                 row.setSpacing(20);
 
-                TextField p = new TextField();
+                TextField p = new TextField("Direction");
                 p.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 p.setFont(new Font("Arial", 15));
                 p.setFocusTraversable(true);
                 p.setPrefWidth(100);
                 p.setPrefHeight(45);
 
-                TextField q = new TextField();
+                Text arrow = new Text("→");
+                arrow.setFont(new Font("Arial", 15));
+
+                TextField q = new TextField("Destination");
                 q.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 q.setFont(new Font("Arial", 15));
                 q.setFocusTraversable(true);
                 q.setPrefWidth(100);
                 q.setPrefHeight(45);
 
-                row.getChildren().addAll(p, q);
+                row.getChildren().addAll(p, arrow, q);
                 roomContainer.getChildren(). add(row);
             }
 
