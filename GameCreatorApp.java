@@ -1,9 +1,8 @@
 import CreatorModel.GameCreator;
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.sql.*;
 
 public class GameCreatorApp extends Application{
 
@@ -13,7 +12,18 @@ public static void main(String[]args){
         }
 
 @Override
-public void start(Stage stage){
+public void start(Stage stage) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "user", "password");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO rooms (idRoom, RoomName) VALUES (4, 'room5');");
+        preparedStatement.executeUpdate();
+        Statement statement2 = connection.createStatement();
+        ResultSet resultSet = statement2.executeQuery("SELECT * FROM rooms;");
+        while (resultSet.next()) {
+                System.out.println(resultSet.getString("RoomName"));
+        }
+
+        resultSet.close();
+
         this.creator = new GameCreator(stage);
         }
 }
