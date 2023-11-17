@@ -16,12 +16,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameCreator {
     Stage stage;
     TextField rNumber;
+    TextField gamename;
     int numRooms;
     Label rNumberLabel;
     ArrayList<String> tempinfo = new ArrayList<>();
@@ -29,7 +34,8 @@ public class GameCreator {
     TextArea roomDescription;
     TextField numPaths;
     HashMap<String, Boolean> obj = new HashMap<>();
-    public GameCreator(Stage stage) {
+    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "user", "password");
+    public GameCreator(Stage stage) throws SQLException {
         this.stage = stage;
         runUI();
     }
@@ -97,21 +103,32 @@ public class GameCreator {
     }
 
     public void creatingrNumberPage() {
-        Group root2 = new Group();
-        Scene scene2 = new Scene(root2, Color.DARKGREEN);
+        VBox root2 = new VBox();
+        root2.setAlignment(Pos.CENTER);
+        root2.setSpacing(30);
+        root2.setPadding(new Insets(0,100,0,100));
 
-        Text text = new Text("How many rooms?");
-        text.setX(175);
-        text.setY(170);
+        Text text = new Text("Game Name");
         text.setFont(Font.font("Arial", 30));
         text.setFill(Color.WHITE);
         root2.getChildren().add(text);
 
+        this.gamename = new TextField();
+        root2.getChildren().add(gamename);
+        gamename.setAccessibleRole(AccessibleRole.TEXT_AREA);
+        gamename.setFont(new Font("Arial", 16));
+        gamename.setFocusTraversable(true);
+        gamename.setPrefHeight(45);
+
+        Text text2 = new Text("How many rooms?");
+        text2.setFont(Font.font("Arial", 30));
+        text2.setFill(Color.WHITE);
+        root2.getChildren().add(text2);
+
         this.rNumberLabel = new Label("You can have a maximum of 20 and a minimum of 2 rooms.");
-        rNumberLabel.setLayoutX(110);
-        rNumberLabel.setLayoutY(200);
         rNumberLabel.setFont(Font.font("Arial", 15));
         rNumberLabel.setTextFill(Color.WHITE);
+        rNumberLabel.setWrapText(true);
         root2.getChildren().add(rNumberLabel);
 
         this.rNumber = new TextField();
@@ -119,20 +136,18 @@ public class GameCreator {
         rNumber.setAccessibleRole(AccessibleRole.TEXT_AREA);
         rNumber.setFont(new Font("Arial", 16));
         rNumber.setFocusTraversable(true);
-        rNumber.setLayoutX(250);
-        rNumber.setLayoutY(300);
-        rNumber.setPrefWidth(100);
+
         rNumber.setPrefHeight(45);
 
         Button submitroom = new Button("Submit");
-        submitroom.setLayoutX(200);
-        submitroom.setLayoutY(400);
         submitroom.setPrefWidth(200);
         submitroom.setPrefHeight(60);
         submitroom.setStyle("-fx-background-color: #003300; -fx-text-fill: white; -fx-font-size: 17px;");
         root2.getChildren().add(submitroom);
         subroomButtonHandler(submitroom);
 
+        root2.setStyle("-fx-background-color: darkgreen;");
+        Scene scene2 = new Scene(root2);
         stage.setScene(scene2);
     }
 
@@ -142,11 +157,17 @@ public class GameCreator {
             button.setOnAction(event -> {
                 try {
                     int output = Integer.parseInt(rNumber.getText());
-                    if (2 <= output & output <= 20) {numRooms = output; rInfoPage(0);}
-                    else {rNumberLabel.setText("Error: Choose a number between 2 and 20.");
+                    if ((2 <= output && output <= 20) && !gamename.getText().isEmpty()) {
+                        numRooms = output;
+                        PreparedStatement preparedStatement = connection.prepareStatement(
+                                "INSERT INTO Games (Game_name, Number_of_rooms) VALUES ('"+gamename.getText()+"',"+numRooms+");");
+                        preparedStatement.executeUpdate();
+                        rInfoPage(0);
+                    }
+                    else {rNumberLabel.setText("Error: Choose a number between 2 and 20. Game Name is required.");
                         rNumberLabel.setTextFill(Color.ORANGE);}
                 } catch (Exception e) {
-                    rNumberLabel.setText("Error: Choose a number between 2 and 20.");
+                    rNumberLabel.setText("Error: Choose a number between 2 and 20. Game Name is required.");
                     rNumberLabel.setTextFill(Color.ORANGE);}
             });
     }
@@ -264,6 +285,11 @@ public class GameCreator {
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
                 tempinfo.add(obj.toString());
+//                PreparedStatement preparedStatement = connection.prepareStatement(
+//                        "CREATE TABLE" +" (Room_id INT PRIMARY KEY, room_name VARCHAR(255), " +
+//                                "room_description VARCHAR(255), Number_of_paths INT, Objects VARCHAR(255));"
+//                );
+//                preparedStatement.executeUpdate();
                 rInfoPage(x+1);
             }
             else {
