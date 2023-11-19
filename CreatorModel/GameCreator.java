@@ -26,17 +26,18 @@ import java.util.Objects;
 public class GameCreator {
     Stage stage;
     TextField rNumber;
-    TextField gamename;
+    TextField gamenametext;
     int game_id;
     int room_id;
     int numRooms;
+    String gamename;
     Label rNumberLabel;
     ArrayList<String> tempinfo = new ArrayList<>();
     TextField roomName;
     TextArea roomDescription;
     TextField numPaths;
     HashMap<String, Boolean> obj = new HashMap<>();
-    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "user", "password");
+    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
     public GameCreator(Stage stage) throws SQLException {
         this.stage = stage;
         runUI();
@@ -115,12 +116,12 @@ public class GameCreator {
         text.setFill(Color.WHITE);
         root2.getChildren().add(text);
 
-        this.gamename = new TextField();
-        root2.getChildren().add(gamename);
-        gamename.setAccessibleRole(AccessibleRole.TEXT_AREA);
-        gamename.setFont(new Font("Arial", 16));
-        gamename.setFocusTraversable(true);
-        gamename.setPrefHeight(45);
+        this.gamenametext = new TextField();
+        root2.getChildren().add(gamenametext);
+        gamenametext.setAccessibleRole(AccessibleRole.TEXT_AREA);
+        gamenametext.setFont(new Font("Arial", 16));
+        gamenametext.setFocusTraversable(true);
+        gamenametext.setPrefHeight(45);
 
         Text text2 = new Text("How many rooms?");
         text2.setFont(Font.font("Arial", 30));
@@ -159,17 +160,9 @@ public class GameCreator {
             button.setOnAction(event -> {
                 try {
                     int output = Integer.parseInt(rNumber.getText());
-                    if ((2 <= output && output <= 20) && !gamename.getText().isEmpty()) {
+                    if ((2 <= output && output <= 20) && !gamenametext.getText().isEmpty()) {
                         numRooms = output;
-                        PreparedStatement preparedStatement = connection.prepareStatement(
-                                "INSERT INTO Games (Game_name, Number_of_rooms) VALUES ('"+gamename.getText()+"',"+numRooms+");");
-                        preparedStatement.executeUpdate();
-                        Statement statement = connection.createStatement();
-                        ResultSet resultSet = statement.executeQuery("SELECT * FROM Games;");
-                        while (resultSet.next()) {
-                            game_id = Integer.parseInt(resultSet.getString("Game_id"));
-                        }
-                        resultSet.close();
+                        gamename = gamenametext.getText();
                         rInfoPage(0);
                     }
                     else {rNumberLabel.setText("Error: Choose a number between 2 and 20. Game Name is required.");
@@ -292,45 +285,22 @@ public class GameCreator {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
-                tempinfo.add(obj.toString());
                 ArrayList<String> temp = new ArrayList<>();
                 for (Map.Entry<String, Boolean> k : obj.entrySet()){
                     if (k.getValue()) {temp.add(k.getKey());}
                 }
-                System.out.println(temp);
-                if (x == 0){
-                    PreparedStatement preparedStatement = connection.prepareStatement(
-                            "CREATE TABLE Game_"+ game_id +" (Room_id INT AUTO_INCREMENT PRIMARY KEY, Room_name VARCHAR(100), " +
-                                    "Room_description VARCHAR(300), Number_of_paths INT, Objects VARCHAR(300));"
-                    );
-                    preparedStatement.executeUpdate();
-                }
-                PreparedStatement preparedStatement2 = connection.prepareStatement(
-                        "INSERT INTO Game_"+ game_id+" (room_name, room_description, Number_of_paths,Objects) VALUES" +
-                                "('"+ roomName.getText()+ "', '"+ roomDescription.getText()+ "', "+ numPaths.getText()+",'" +temp.toString()+"');");
-                preparedStatement2.executeUpdate();
+                tempinfo.add(temp.toString());
                 rInfoPage(x+1);
             }
             else {
                 tempinfo.add(roomName.getText());
                 tempinfo.add(roomDescription.getText());
                 tempinfo.add(numPaths.getText());
-                tempinfo.add(obj.toString());
                 ArrayList<String> temp = new ArrayList<>();
                 for (Map.Entry<String, Boolean> k : obj.entrySet()){
                     if (k.getValue()) {temp.add(k.getKey());}
                 }
-                if (x == 0){
-                    PreparedStatement preparedStatement = connection.prepareStatement(
-                            "CREATE TABLE Game_"+ game_id +" (Room_id INT AUTO_INCREMENT PRIMARY KEY, Room_name VARCHAR(100), " +
-                                    "Room_description VARCHAR(300), Number_of_paths INT, Objects VARCHAR(300));"
-                    );
-                    preparedStatement.executeUpdate();
-                }
-                PreparedStatement preparedStatement2 = connection.prepareStatement(
-                        "INSERT INTO Game_"+ game_id+" (room_name, room_description, Number_of_paths,Objects) VALUES" +
-                                "('"+ roomName.getText()+ "', '"+ roomDescription.getText()+ "', "+ numPaths.getText()+",'" +temp.toString()+"');");
-                preparedStatement2.executeUpdate();
+                tempinfo.add(temp.toString());
                 pathInfoPage();}
             } catch (Exception e) {pathLabel.setText("Error: Room Name and Number of Paths " +
                     "categories are required. Number of Paths must be an integer.");
@@ -356,6 +326,7 @@ public class GameCreator {
 
         for (int i = 1; i <= numRooms; i++) {
             Text text = new Text("Room " + i + " Paths");
+            text.setId("RoomNum");
             text.setFont(Font.font("Arial", 20));
             text.setFill(Color.BLACK);
 
@@ -370,6 +341,7 @@ public class GameCreator {
                 row.setSpacing(20);
 
                 TextField p = new TextField("Direction");
+                p.setId("Direction");
                 p.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 p.setFont(new Font("Arial", 15));
                 p.setFocusTraversable(true);
@@ -380,7 +352,7 @@ public class GameCreator {
                 arrow.setFont(new Font("Arial", 15));
 
                 TextField q = new TextField("Destination");
-                q.setId("Room");
+                q.setId("Destination");
                 q.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 q.setFont(new Font("Arial", 15));
                 q.setFocusTraversable(true);
@@ -422,13 +394,20 @@ public class GameCreator {
                     if (((TextField) n).getText().isEmpty()) {check = false;}
                     if (Objects.equals(n.getId(), "Object")) {
                         if (obj.containsKey(((TextField) n).getText())) {check = false;}}
-                    if (Objects.equals(n.getId(), "Room")) {
+                    if (Objects.equals(n.getId(), "Destination")) {
                         try {Integer.parseInt(((TextField) n).getText());} catch (Exception e) {check = false;}
                     }
                 }
             }
             if (!check) {label.setTextFill(Color.ORANGE);}
-            else {updateDatabase();}
+            else {
+                try {
+                    submitInfoButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 20px;");
+                    updateDatabase(root4);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
 
         ScrollPane scrollPane = new ScrollPane(root4);
@@ -436,8 +415,38 @@ public class GameCreator {
         stage.setScene(new Scene(scrollPane, Color.WHITE));
     }
 
-    public void updateDatabase() {
+    public void updateDatabase(VBox root4) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO Games (Game_name, Number_of_rooms) VALUES ('"+gamenametext.getText()+"',"+numRooms+");");
+        ps.executeUpdate();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Games;");
+        while (resultSet.next()) {
+            game_id = Integer.parseInt(resultSet.getString("Game_id"));
+        }
+        resultSet.close();
+
+        PreparedStatement ps2 = connection.prepareStatement(
+                "CREATE TABLE Game_"+ game_id +" (Room_id INT AUTO_INCREMENT PRIMARY KEY, Room_name VARCHAR(100), " +
+                        "Room_description VARCHAR(300), Number_of_paths INT, Objects VARCHAR(300));"
+        );
+        ps2.executeUpdate();
+        for (int i=0; i < tempinfo.size(); i++) {
+            if ((i + 1) % 4 == 0) {
+                PreparedStatement ps3 = connection.prepareStatement(
+                        "INSERT INTO Game_"+ game_id+" (room_name, room_description, Number_of_paths,Objects) VALUES" +
+                                "('"+ tempinfo.get(i-3)+ "', '"+ tempinfo.get(i-2)+ "', "+ tempinfo.get(i-1)+",'" +tempinfo.get(i)+"');");
+                ps3.executeUpdate();
+            }
+        }
+//        int r = 1;
+//        for (Node n: root4.getChildren()) {
+//            if (n.getId() == "RoomNum") {
+//                PreparedStatement ps3 = connection.prepareStatement(
+//                        "CREATE TABLE Game_"+ game_id +"_Room_" +r+" (Path_id INT AUTO_INCREMENT PRIMARY KEY, Path_direction VARCHAR(100), " +
+//                                "Path_destination INT, Blocked VARCHAR(300));"
+//                );
+//                ps3.executeUpdate();
+//                r++;
     }
-
-
 }
