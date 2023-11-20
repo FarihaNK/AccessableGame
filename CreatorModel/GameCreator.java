@@ -33,6 +33,7 @@ public class GameCreator {
     String gamename;
     Label rNumberLabel;
     ArrayList<String> tempinfo = new ArrayList<>();
+    ArrayList<Node> nodeList = new ArrayList<>();
     TextField roomName;
     TextArea roomDescription;
     TextField numPaths;
@@ -334,6 +335,7 @@ public class GameCreator {
             roomContainer.setAlignment(Pos.CENTER);
             roomContainer.setSpacing(10);
             roomContainer.getChildren().add(text);
+            nodeList.add(text);
 
             for (int k = 0; k < Integer.parseInt(tempinfo.get(4 * i - 2)); k++) {
                 HBox row = new HBox();
@@ -347,9 +349,11 @@ public class GameCreator {
                 p.setFocusTraversable(true);
                 p.setPrefWidth(140);
                 p.setPrefHeight(45);
+                nodeList.add(p);
 
                 Text arrow = new Text("→");
                 arrow.setFont(new Font("Arial", 15));
+                nodeList.add(arrow);
 
                 TextField q = new TextField("Destination");
                 q.setId("Destination");
@@ -358,24 +362,28 @@ public class GameCreator {
                 q.setFocusTraversable(true);
                 q.setPrefWidth(100);
                 q.setPrefHeight(45);
+                nodeList.add(q);
 
                 Button blockedbutton = new Button("Unblocked");
+                blockedbutton.setId("blockbutton");
                 blockedbutton.setPrefWidth(80);
                 blockedbutton.setPrefHeight(45);
                 blockedbutton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 12px;");
-                TextField blocking = new TextField("Object");
+                nodeList.add(blockedbutton);
+                TextField blocking = new TextField();
                 blocking.setId("Object");
                 blocking.setAccessibleRole(AccessibleRole.TEXT_AREA);
                 blocking.setFont(new Font("Arial", 15));
                 blocking.setFocusTraversable(true);
                 blocking.setPrefWidth(80);
                 blocking.setPrefHeight(45);
-                blockedbutton.setOnAction(event -> row.getChildren().add(blocking));
+                blockedbutton.setOnAction(event -> row.getChildren().add(blocking)); nodeList.add(blocking);
                 blockedbutton.setOnMousePressed(event -> {
                     blockedbutton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 12px;");
                     blockedbutton.setText("Blocked");});
 
                 row.getChildren().addAll(p, arrow, q, blockedbutton);
+
                 roomContainer.getChildren().add(row);
             }
 
@@ -431,7 +439,7 @@ public class GameCreator {
                         "Room_description VARCHAR(300), Number_of_paths INT, Objects VARCHAR(300));"
         );
         ps2.executeUpdate();
-        for (int i=0; i < tempinfo.size(); i++) {
+        for (int i=0; i <= tempinfo.size(); i++) {
             if ((i + 1) % 4 == 0) {
                 PreparedStatement ps3 = connection.prepareStatement(
                         "INSERT INTO Game_"+ game_id+" (room_name, room_description, Number_of_paths,Objects) VALUES" +
@@ -439,14 +447,43 @@ public class GameCreator {
                 ps3.executeUpdate();
             }
         }
-//        int r = 1;
-//        for (Node n: root4.getChildren()) {
-//            if (n.getId() == "RoomNum") {
-//                PreparedStatement ps3 = connection.prepareStatement(
-//                        "CREATE TABLE Game_"+ game_id +"_Room_" +r+" (Path_id INT AUTO_INCREMENT PRIMARY KEY, Path_direction VARCHAR(100), " +
-//                                "Path_destination INT, Blocked VARCHAR(300));"
-//                );
-//                ps3.executeUpdate();
-//                r++;
+        int r = 0;
+        String di = null;
+        int de = 0;
+        String o = null;
+        boolean b = false;
+        for (Node n: nodeList) {
+            if (b) {
+                b = false;
+                if (n instanceof TextField ){
+                    o = ((TextField) n).getText();
+                    PreparedStatement ps5 = connection.prepareStatement(
+                            "INSERT INTO Game_"+ game_id +"_Room_" +r+" (Path_direction, Path_destination, Blocked) VALUES" +
+                                    "('"+ di + "', "+ de + ", '"+o+"');");
+                    ps5.executeUpdate();
+                }
+            }
+            else if (Objects.equals(n.getId(), "RoomNum")) {
+                r++;
+                PreparedStatement ps4 = connection.prepareStatement(
+                        "CREATE TABLE Game_"+ game_id +"_Room_" +r+" (Path_id INT AUTO_INCREMENT PRIMARY KEY, Path_direction VARCHAR(100), " +
+                                "Path_destination INT, Blocked VARCHAR(300));"
+                );
+                ps4.executeUpdate();
+            }
+            else if (Objects.equals(n.getId(), "Direction") && n instanceof TextField) {di = ((TextField) n).getText();}
+            else if (Objects.equals(n.getId(), "Destination") && n instanceof TextField) {de = Integer.parseInt(((TextField) n).getText());}
+            else if (Objects.equals(n.getId(), "blockbutton") && n instanceof Button) {
+                if (Objects.equals(((Button) n).getText(), "Blocked")) {b = true;}
+                else {o = null;
+                    PreparedStatement ps5 = connection.prepareStatement(
+                            "INSERT INTO Game_"+ game_id +"_Room_" +r+" (Path_direction, Path_destination, Blocked) VALUES" +
+                                    "('"+ di + "', "+ de + ", '"+o+"');");
+                    ps5.executeUpdate();
+                }
+            }
+        }
     }
+
+
 }
