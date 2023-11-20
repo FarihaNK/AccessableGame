@@ -39,7 +39,7 @@ public class GameCreator {
     public GameCreator(Stage stage) throws SQLException {
         this.stage = stage;
         //runUI();
-        CreatedGamePlayer x = new CreatedGamePlayer(stage);
+        CreatedGamePlayer x = new CreatedGamePlayer(stage, "Test");
         x.runUI();
     }
 
