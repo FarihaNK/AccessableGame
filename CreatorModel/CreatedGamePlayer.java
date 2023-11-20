@@ -10,8 +10,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
+import java.io.FileWriter;
+import java.util.ArrayList;
+
 public class CreatedGamePlayer{
     Stage stage;
+    int game_id;
     public CreatedGamePlayer(Stage stage){
         this.stage = stage;
         runUI();
@@ -58,6 +62,7 @@ public class CreatedGamePlayer{
         playButton.setTextFill(Color.WHITE);
         playButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 25px;");
         root.getChildren().add(playButton);
+        playgameHandler(playButton);
 
         stage.setScene(scene);
         stage.setTitle("PlayGame");
@@ -65,4 +70,52 @@ public class CreatedGamePlayer{
         stage.setHeight(600);
         stage.show();
     }
+
+    public void playgameHandler(Button playButton){
+        playButton.setOnMousePressed(event -> playButton.setStyle("-fx-background-color: orange; -fx-text-fill: white;-fx-font-size: 25px;"));
+        playButton.setOnMouseReleased(event -> playButton.setStyle("-fx-background-color: green; -fx-text-fill: white;-fx-font-size: 25px;"));
+        playButton.setOnAction(event -> {
+            writeGame(1, 4);
+        });
+    }
+
+    public ArrayList<ArrayList<?>> objectList(){
+        ArrayList<ArrayList<?>> output = new ArrayList<>();
+
+        return output;
+    }
+     public void writeGame(int game_id, int number_of_rooms) {
+
+        String roomsPath = "Games/rooms.txt";
+         try {
+             FileWriter fileWriter = new FileWriter(roomsPath);
+             int r = 1;
+             while (r <= number_of_rooms) {
+                 fileWriter.write(r+ "\n");
+                 fileWriter.write("roomname\n");
+                 fileWriter.write("roomdescription\n");
+                 fileWriter.write("-----\n");
+                 fileWriter.write("paths\n\n");
+                 r++;
+             } fileWriter.close();
+         } catch (Exception e) {
+             //TODO: handle exception
+         }
+
+         String objPath = "Games/objects.txt";
+         try {
+             FileWriter fileWriter = new FileWriter(objPath);
+             int r = 1;
+             while (r <= number_of_rooms) {
+                 fileWriter.write(r+ "\n");
+                 fileWriter.write("roomname\n");
+                 fileWriter.write("roomdescription\n");
+                 fileWriter.write("-----\n");
+                 fileWriter.write("paths\n\n");
+                 r++;
+             } fileWriter.close();
+         } catch (Exception e) {
+             //TODO: handle exception
+         }
+     }
 }
