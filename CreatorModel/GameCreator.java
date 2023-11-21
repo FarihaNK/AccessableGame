@@ -38,9 +38,7 @@ public class GameCreator {
 
     public GameCreator(Stage stage) throws SQLException {
         this.stage = stage;
-        //runUI();
-        CreatedGamePlayer x = new CreatedGamePlayer(stage, "Test");
-        x.runUI();
+        runUI();
     }
 
     public void runUI() {
@@ -48,15 +46,15 @@ public class GameCreator {
         Scene scene = new Scene(root, Color.BLACK);
 
         Text text = new Text("CHOOSE YOUR GAME");
-        text.setX(140);
-        text.setY(100);
-        text.setFont(Font.font("Arial", 30));
+        text.setX(160);
+        text.setY(80);
+        text.setFont(Font.font("Arial", 25));
         text.setFill(Color.WHITE);
         root.getChildren().add(text);
 
         Button tinyGame = new Button("TinyGame");
         tinyGame.setLayoutX(150);
-        tinyGame.setLayoutY(170);
+        tinyGame.setLayoutY(120);
         tinyGame.setPrefWidth(300);
         tinyGame.setPrefHeight(70);
         tinyGame.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 20px;");
@@ -65,7 +63,7 @@ public class GameCreator {
 
         Button mediumGame = new Button("MediumGame");
         mediumGame.setLayoutX(150);
-        mediumGame.setLayoutY(270);
+        mediumGame.setLayoutY(220);
         mediumGame.setPrefWidth(300);
         mediumGame.setPrefHeight(70);
         mediumGame.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 20px;");
@@ -74,12 +72,28 @@ public class GameCreator {
 
         Button createGame = new Button("Create Your Own Game");
         createGame.setLayoutX(150);
-        createGame.setLayoutY(370);
+        createGame.setLayoutY(320);
         createGame.setPrefWidth(300);
         createGame.setPrefHeight(70);
-        createGame.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;");
+        createGame.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 18px;");
         root.getChildren().add(createGame);
         createButtonHandler(createGame);
+
+        Text text2 = new Text("ACCESS THE CREATOR HUB");
+        text2.setX(160);
+        text2.setY(450);
+        text2.setFont(Font.font("Arial", 20));
+        text2.setFill(Color.WHITE);
+        root.getChildren().add(text2);
+
+        Button creatorHub = new Button("Game Creator Hub");
+        creatorHub.setLayoutX(150);
+        creatorHub.setLayoutY(480);
+        creatorHub.setPrefWidth(300);
+        creatorHub.setPrefHeight(50);
+        creatorHub.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 18px;");
+        root.getChildren().add(creatorHub);
+        creatorHubButtonHandler(creatorHub);
 
         stage.setScene(scene);
         stage.setTitle("Choose your Accessible Game");
@@ -88,9 +102,55 @@ public class GameCreator {
         stage.show();
     }
 
+    public void creatorHubButtonHandler(Button hubButton){
+        hubButton.setOnMousePressed(event -> hubButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 18px;"));
+        hubButton.setOnMouseReleased(event -> hubButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 18px;"));
+        hubButton.setOnAction(event -> {
+            VBox root = new VBox();
+            root.setAlignment(Pos.CENTER);
+            root.setStyle("-fx-background-color: green;");
+            root.setSpacing(30);
+            root.setPadding(new Insets(0,100,0,100));
+            Scene scene = new Scene(root);
+
+            Text text = new Text("Game Creator Hub");
+            text.setFont(Font.font("Arial", 30));
+            text.setFill(Color.WHITE);
+            root.getChildren().add(text);
+
+            ListView gamehub = new ListView();
+            try {
+                gamehub.getItems().addAll(DatabaseUpdater.getGameNames());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            root.getChildren().add(gamehub);
+
+            Button selectgameButton = new Button("Select Game");
+            selectgameButton.setPrefWidth(300);
+            selectgameButton.setPrefHeight(50);
+            selectgameButton.setStyle("-fx-background-color: darkgreen; -fx-text-fill: white; -fx-font-size: 18px;");
+            root.getChildren().add(selectgameButton);
+            selectgameButtonHandler(selectgameButton, gamehub);
+
+            stage.setScene(scene);
+        });
+    }
+
+    public void selectgameButtonHandler(Button selectButton, ListView gamehub){
+        selectButton.setOnAction(event -> {
+            if (gamehub.getSelectionModel().getSelectedItem() != null){
+                String selected = gamehub.getSelectionModel().getSelectedItem().toString();
+                try {
+                    CreatedGamePlayer x = new CreatedGamePlayer(stage, selected);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }}});
+    }
+
     public void gameButtonHandler(Button gameButton) {
-        gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 17px;"));
-        gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;"));
+        gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 20px;"));
+        gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 20px;"));
         gameButton.setOnAction(event -> {
             AccessibleGame model = new AccessibleGame(gameButton.getText());
             GameVisualizer visualizer = new GameVisualizer(model, stage);
@@ -98,8 +158,8 @@ public class GameCreator {
     }
 
     public void createButtonHandler(Button gameButton) {
-        gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 17px;"));
-        gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;"));
+        gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 18px;"));
+        gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 18px;"));
         gameButton.setOnAction(event -> {
             creatingrNumberPage();
         });
@@ -421,6 +481,7 @@ public class GameCreator {
                     submitInfoButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 20px;");
                     DB.setRoomInfo(roominfo);
                     DB.updateDatabase();
+                    CreatedGamePlayer x = new CreatedGamePlayer(stage, DB.gamename);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

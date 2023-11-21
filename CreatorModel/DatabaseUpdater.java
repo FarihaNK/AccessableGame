@@ -9,7 +9,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class DatabaseUpdater{
-    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
+    static Connection connection;
+
+    static {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<Node> nodeList = new ArrayList<>();
     public int game_id;
     public String gamename;
@@ -93,5 +102,18 @@ public class DatabaseUpdater{
                 }
             }
         }
+    }
+
+    public static ArrayList<String> getGameNames() throws SQLException {
+        ArrayList<String> gameNames = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT Game_name FROM Games;");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                String gameName = resultSet.getString("Game_name");
+                gameNames.add(gameName);
+            }
+        }
+        return gameNames;
     }
 }

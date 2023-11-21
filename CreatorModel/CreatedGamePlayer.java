@@ -72,37 +72,7 @@ public class CreatedGamePlayer{
         Scene scene = new Scene(root);
         this.scene = scene;
 
-        Text text = new Text("Do you want to share your game?");
-        text.setFont(Font.font("Arial", 25));
-        text.setFill(Color.WHITE);
-        root.getChildren().add(text);
-
-        HBox yesnoButtons = new HBox();
-        yesnoButtons.setAlignment(Pos.CENTER);
-        yesnoButtons.setSpacing(20);
-        root.getChildren().add(yesnoButtons);
-
-        Button yesButton = new Button("Yes");
-        yesButton.setPrefWidth(80);
-        yesButton.setPrefHeight(50);
-        yesButton.setTextFill(Color.WHITE);
-        yesButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 15px;");
-        yesnoButtons.getChildren().add(yesButton);
-
-        Button noButton = new Button("No");
-        noButton.setPrefWidth(80);
-        noButton.setPrefHeight(50);
-        noButton.setTextFill(Color.WHITE);
-        noButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");
-        yesnoButtons.getChildren().add(noButton);
-        noButton.setOnMouseClicked(event -> {
-            noButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 15px;");
-            yesButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");});
-        yesButton.setOnMouseClicked(event -> {
-            yesButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 15px;");
-            noButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");});
-
-        Text text2 = new Text("Click to play");
+        Text text2 = new Text("Click to play '" + gamename+ "'");
         text2.setFont(Font.font("Arial", 25));
         text2.setFill(Color.WHITE);
         root.getChildren().add(text2);
@@ -130,7 +100,7 @@ public class CreatedGamePlayer{
                 writeRooms();
                 writeObjects();
                 writeHelp();
-                this.model = new AccessibleGame("Test");
+                this.model = new AccessibleGame(gamename);
                 this.view = new GameVisualizer(model, stage);
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
