@@ -14,14 +14,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class CreatedGamePlayer{
     Stage stage;
     int game_id;
     int number_of_rooms;
-    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "user", "password");
+    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
     String gamename;
+    HashMap<String, String> objectInfo = new HashMap<>();
+
     public CreatedGamePlayer(Stage stage, String gamename) throws SQLException {
 
         PreparedStatement ps = connection.prepareStatement("SELECT Game_id FROM Games WHERE Game_name = '"+gamename+"';");
@@ -32,8 +36,26 @@ public class CreatedGamePlayer{
         this.gamename = gamename;
         this.game_id = x;
         this.stage = stage;
+        setObjectInfo();
         runUI();
     }
+
+    private void setObjectInfo(){
+        objectInfo.put("KEYS", "a set of keys");
+        objectInfo.put("LAMP", "a brightly shining brass lamp");
+        objectInfo.put("ROD", "a black rod with a rusty star");
+        objectInfo.put("BIRD", "a water bird");
+        objectInfo.put("NUGGET", "a nugget of gold");
+        objectInfo.put("DIAMOND", "a sparkling diamond");
+        objectInfo.put("COINS", "a bag of coins");
+        objectInfo.put("EMERALD", "an emerald the size of a plover's egg");
+        objectInfo.put("EGGS", "a nest of golden eggs");
+        objectInfo.put("WATER", "a bottle of water");
+        objectInfo.put("PLANT", "a small plant murmuring 'Water, water'");
+        objectInfo.put("CHEST", "a pirate chest");
+        objectInfo.put("BOOK", "a copy of an illuminated manuscript");
+    }
+
     public void runUI(){
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
@@ -90,7 +112,7 @@ public class CreatedGamePlayer{
         playButton.setOnMouseReleased(event -> playButton.setStyle("-fx-background-color: green; -fx-text-fill: white;-fx-font-size: 25px;"));
         playButton.setOnAction(event -> {
             try {
-                writeGame(1);
+                writeRooms();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -102,7 +124,7 @@ public class CreatedGamePlayer{
         //TODO: update object list with all objects in room
         return output;
     }
-     public void writeGame(int game_id) throws SQLException {
+     public void writeRooms() throws SQLException {
          PreparedStatement ps1 = connection.prepareStatement("SELECT Number_of_rooms FROM Games WHERE Game_id = "+game_id+";");
          ResultSet resultSet1 = ps1.executeQuery();
          resultSet1.next();
@@ -124,7 +146,6 @@ public class CreatedGamePlayer{
                  ResultSet resultSet2 = ps2.executeQuery();
                  resultSet2.next();
                  String a = resultSet2.getString("Room_name");
-                 System.out.println(a);
 
                  fileWriter.write(a+"\n");
 
@@ -132,7 +153,6 @@ public class CreatedGamePlayer{
                  ResultSet resultSet3 = ps3.executeQuery();
                  resultSet3.next();
                  String b = resultSet3.getString("Room_description");
-                 System.out.println(b);
 
                  fileWriter.write(b+"\n");
                  fileWriter.write("-----\n");
@@ -141,7 +161,6 @@ public class CreatedGamePlayer{
                  ResultSet resultSet4 = ps4.executeQuery();
                  resultSet4.next();
                  int c = resultSet4.getInt("Number_of_paths");
-                 System.out.println(c);
                  int p = 1;
 
                  while (p <= c){
@@ -158,23 +177,45 @@ public class CreatedGamePlayer{
 
                  fileWriter.write("\n");
                  r++;
-             } fileWriter.close();
+             }
+             fileWriter.write("21\n");
+             fileWriter.write("Victory\n");
+             fileWriter.write("You have collected all the treasures and are admitted to the Adventurer's Hall of Fame.  Congratulations!\n");
+             fileWriter.write("-----\n");
+             fileWriter.write("FORCED     0\n");
+             fileWriter.write("\n");
+
+             fileWriter.close();
          } catch (Exception e) {
              //TODO: handle exception
          }
+         writeObjects();
+     }
 
+     public void writeObjects() throws SQLException{
          String objPath = "Games/"+gamename+"/objects.txt";
          try {
              int r = 1;
              FileWriter fileWriter = new FileWriter(objPath);
-             while (r <= 4) {
-                 fileWriter.write("objname\n");
-                 fileWriter.write("objdescription\n");
-                 fileWriter.write("roomnum\n\n");
+             while (r <= number_of_rooms) {
+                 PreparedStatement ps1 = connection.prepareStatement("SELECT Objects FROM Game_"+game_id+" WHERE Room_id = "+r+";");
+                 ResultSet resultSet1 = ps1.executeQuery();
+                 resultSet1.next();
+                 String a = resultSet1.getString("Objects");
+                 String[] elements = a.replaceAll("[\\[\\]]", "").split(", ");
+                 ArrayList<String> b = new ArrayList<>(Arrays.asList(elements));
+
+                 for (String obj: b) {
+                     fileWriter.write(obj+"\n");
+                     fileWriter.write(objectInfo.get(obj) + "\n");
+                     fileWriter.write(r+"\n\n");
+                 }
+
                  r++;
+
              } fileWriter.close();
          } catch (Exception e) {
              //TODO: handle exception
          }
-     }
+    }
 }
