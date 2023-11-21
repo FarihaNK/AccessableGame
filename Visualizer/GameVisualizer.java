@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import javafx.event.EventHandler;
 import javafx.scene.AccessibleRole;
 
 import java.io.File;
@@ -374,20 +373,32 @@ public class GameVisualizer {
      * it in the roomImageView
      */
     private void getRoomImage() {
+        try{int roomNumber = this.model.getPlayer().getCurrentRoom().getRoomNumber();
+            String roomImage = this.model.getDirectoryName() + "/room-images/" + roomNumber + ".png";
 
-        int roomNumber = this.model.getPlayer().getCurrentRoom().getRoomNumber();
-        String roomImage = this.model.getDirectoryName() + "/room-images/" + roomNumber + ".png";
+            Image roomImageFile = new Image(roomImage);
+            roomImageView = new ImageView(roomImageFile);
+            roomImageView.setPreserveRatio(true);
+            roomImageView.setFitWidth(400);
+            roomImageView.setFitHeight(400);
 
-        Image roomImageFile = new Image(roomImage);
-        roomImageView = new ImageView(roomImageFile);
-        roomImageView.setPreserveRatio(true);
-        roomImageView.setFitWidth(400);
-        roomImageView.setFitHeight(400);
+            //set accessible text
+            roomImageView.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
+            roomImageView.setAccessibleText(this.model.getPlayer().getCurrentRoom().getRoomDescription());
+            roomImageView.setFocusTraversable(true);
+        } catch (Exception e){
+            String roomImage = "Games/1.png";
+            Image roomImageFile = new Image(roomImage);
+            roomImageView = new ImageView(roomImageFile);
+            roomImageView.setPreserveRatio(true);
+            roomImageView.setFitWidth(400);
+            roomImageView.setFitHeight(400);
 
-        //set accessible text
-        roomImageView.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
-        roomImageView.setAccessibleText(this.model.getPlayer().getCurrentRoom().getRoomDescription());
-        roomImageView.setFocusTraversable(true);
+            //set accessible text
+            roomImageView.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
+            roomImageView.setAccessibleText(this.model.getPlayer().getCurrentRoom().getRoomDescription());
+            roomImageView.setFocusTraversable(true);
+        }
     }
 
     /** Helper Method
@@ -424,7 +435,7 @@ public class GameVisualizer {
         List<GameObject> objectlist = this.model.getPlayer().getCurrentRoom().objectsInRoom;
         objectsInRoom.getChildren().clear();
         for (GameObject obj: objectlist) {
-            String objimage = this.model.getDirectoryName() + "/objectImages/" + obj.getName() + ".jpg";
+            String objimage = "Games/objectImages/" + obj.getName() + ".jpg";
             Image objimagefile = new Image(objimage);
             ImageView objimageview = new ImageView(objimagefile);
             objimageview.setFitWidth(100);
@@ -441,7 +452,7 @@ public class GameVisualizer {
         List<GameObject> invobjectlist = this.model.getPlayer().inventory;
         objectsInInventory.getChildren().clear();
         for (GameObject invobj: invobjectlist) {
-            String invobjimage = this.model.getDirectoryName() + "/objectImages/" + invobj.getName() + ".jpg";
+            String invobjimage = "Games/objectImages/" + invobj.getName() + ".jpg";
             Image invobjimagefile = new Image(invobjimage);
             ImageView invobjimageview = new ImageView(invobjimagefile);
             invobjimageview.setFitWidth(100);
@@ -572,20 +583,20 @@ public class GameVisualizer {
      * This method articulates Room Descriptions
      */
     public void articulateRoomDescription() {
-        String musicFile;
-        String gameName = this.model.getDirectoryName();
-        String roomName = this.model.getPlayer().getCurrentRoom().getRoomName();
+        try{String musicFile;
+            String gameName = this.model.getDirectoryName();
+            String roomName = this.model.getPlayer().getCurrentRoom().getRoomName();
 
-        if (!this.model.getPlayer().getCurrentRoom().getVisited()) musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-long.mp3" ;
-        else musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-short.mp3" ;
-        musicFile = musicFile.replace(" ","-");
+            if (!this.model.getPlayer().getCurrentRoom().getVisited()) musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-long.mp3" ;
+            else musicFile = "./" + gameName + "/sounds/" + roomName.toLowerCase() + "-short.mp3" ;
+            musicFile = musicFile.replace(" ","-");
 
-        Media sound = new Media(new File(musicFile).toURI().toString());
+            Media sound = new Media(new File(musicFile).toURI().toString());
 
-        mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
-        mediaPlaying = true;
-
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+            mediaPlaying = true;
+        } catch (Exception ignored){}
     }
 
     /**

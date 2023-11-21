@@ -1,5 +1,7 @@
 package CreatorModel;
 
+import GameModel.AccessibleGame;
+import Visualizer.GameVisualizer;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -13,6 +15,8 @@ import javafx.scene.control.Button;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +24,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class CreatedGamePlayer{
+    AccessibleGame model;
+    GameVisualizer view;
     Stage stage;
     Scene scene;
     int game_id;
@@ -122,6 +128,10 @@ public class CreatedGamePlayer{
         playButton.setOnAction(event -> {
             try {
                 writeRooms();
+                writeObjects();
+                writeHelp();
+                this.model = new AccessibleGame("Test");
+                this.view = new GameVisualizer(model, stage);
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -194,7 +204,6 @@ public class CreatedGamePlayer{
              System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
                      new Text("There was an error with your game, restart the application.")));
          }
-         writeObjects();
      }
 
      public void writeObjects() throws SQLException, IOException {
@@ -223,9 +232,10 @@ public class CreatedGamePlayer{
              System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
                      new Text("There was an error with your game, restart the application.")));
          }
-         writeHelp();
     }
     public void writeHelp() throws IOException {
+        String synPath = "Games/"+gamename+"/synonyms.txt";
+        if (!Files.exists(Path.of(synPath))) {Files.createFile(Path.of(synPath));}
         String helpPath = "Games/"+gamename+"/help.txt";
         FileWriter fileWriter = new FileWriter(helpPath);
         fileWriter.write(
