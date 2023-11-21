@@ -24,7 +24,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class GameCreator {
-    DatabaseUpdater DB = new DatabaseUpdater();
+    DatabaseUpdater DB;
+    String myUsername;
     Stage stage;
     TextField numroomsTextFeild;
     TextField gamenameTextFeild;
@@ -36,7 +37,9 @@ public class GameCreator {
     TextField numPaths;
     HashMap<String, Boolean> obj = new HashMap<>();
 
-    public GameCreator(Stage stage) throws SQLException {
+    public GameCreator(Stage stage, String myUsername) throws SQLException {
+        this.myUsername = myUsername;
+        this.DB = new DatabaseUpdater(myUsername);
         this.stage = stage;
         runUI();
     }
@@ -142,7 +145,8 @@ public class GameCreator {
             if (gamehub.getSelectionModel().getSelectedItem() != null){
                 String selected = gamehub.getSelectionModel().getSelectedItem().toString();
                 try {
-                    CreatedGamePlayer x = new CreatedGamePlayer(stage, selected);
+                    String[] words = selected.split("     ");
+                    CreatedGamePlayer x = new CreatedGamePlayer(stage, words[0]);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }}});

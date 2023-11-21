@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class DatabaseUpdater{
+    String myUsername;
     static Connection connection;
     static {try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
@@ -19,7 +20,8 @@ public class DatabaseUpdater{
     public int num_of_rooms;
     public ArrayList<String> roomInfo;
 
-    public DatabaseUpdater() throws SQLException {
+    public DatabaseUpdater(String myUsername) throws SQLException {
+        this.myUsername = myUsername;
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Games;");
         while (resultSet.next()) {
@@ -44,7 +46,7 @@ public class DatabaseUpdater{
 
     public void updateDatabase() throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO Games (Game_name, Number_of_rooms) VALUES ('"+gamename+"',"+num_of_rooms+");");
+                "INSERT INTO Games (Game_name, Number_of_rooms, Username) VALUES ('"+gamename+"',"+num_of_rooms+",'"+myUsername+"');");
         ps.executeUpdate();
 
         PreparedStatement ps2 = connection.prepareStatement(
@@ -101,11 +103,12 @@ public class DatabaseUpdater{
     public static ArrayList<String> getGameNames() throws SQLException {
         ArrayList<String> gameNames = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT Game_name FROM Games;");
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT Game_name, Username FROM Games;");
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 String gameName = resultSet.getString("Game_name");
-                gameNames.add(gameName);
+                String username = resultSet.getString("Username");
+                gameNames.add(gameName + "     by "+username);
             }
         }
         return gameNames;

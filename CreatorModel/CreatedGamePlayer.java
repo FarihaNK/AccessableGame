@@ -111,13 +111,9 @@ public class CreatedGamePlayer{
          PreparedStatement ps1 = connection.prepareStatement("SELECT Number_of_rooms FROM Games WHERE Game_id = "+game_id+";");
          ResultSet resultSet1 = ps1.executeQuery();
          resultSet1.next();
-         System.out.println("CHECK1");
-         System.out.println(game_id);
 
          int x = resultSet1.getInt("Number_of_rooms");
          this.number_of_rooms = x;
-         System.out.println("CHECK2");
-         System.out.println(x);
 
          File gamenameFile = new File("Games/"+gamename+"/");
          gamenameFile.mkdirs();
@@ -125,18 +121,15 @@ public class CreatedGamePlayer{
          String roomsPath = "Games/"+gamename+"/rooms.txt";
          try {
              FileWriter fileWriter = new FileWriter(roomsPath);
-             System.out.println("CHECK3");
 
              int r = 1;
              while (r <= number_of_rooms) {
                  fileWriter.write(r+ "\n");
-                 System.out.println("check");
 
                  PreparedStatement ps2 = connection.prepareStatement("SELECT Room_name FROM Game_"+game_id+" WHERE Room_id = "+r+";");
                  ResultSet resultSet2 = ps2.executeQuery();
                  resultSet2.next();
                  String a = resultSet2.getString("Room_name");
-                 System.out.println("check2");
 
                  fileWriter.write(a+"\n");
 
@@ -178,8 +171,7 @@ public class CreatedGamePlayer{
 
              fileWriter.close();
          } catch (Exception e) {
-             System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
-                     new Text("There was an error with your game, restart the application.")));
+             this.scene.getRoot().getChildrenUnmodifiable().add(new Text("There was an error with your game, restart the application."));
          }
      }
 

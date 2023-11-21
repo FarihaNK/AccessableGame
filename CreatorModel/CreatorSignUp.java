@@ -18,6 +18,8 @@ import java.util.Objects;
 
 public class CreatorSignUp {
     Stage stage;
+    GameCreator creator;
+    String myUsername;
     Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
     public CreatorSignUp(Stage stage) throws SQLException {
         this.stage = stage;
@@ -126,9 +128,11 @@ public class CreatorSignUp {
                         if (Objects.equals(usernameTextfeild.getText(), username)) {unique = false;}
                     }
                     if (unique) {
+                        this.myUsername = usernameTextfeild.getText();
                         PreparedStatement ps2 = connection.prepareStatement(
-                                "INSERT INTO Users VALUES ('"+usernameTextfeild.getText()+"', '"+passwordTextfeild.getText()+"');");
+                                "INSERT INTO Users VALUES ('"+myUsername+"', '"+passwordTextfeild.getText()+"');");
                         ps2.executeUpdate();
+                        this.creator = new GameCreator(stage, myUsername);
                     }
                     else {usernameLabel.setText("This Username is taken.");}
                 }
@@ -200,7 +204,8 @@ public class CreatorSignUp {
                         if (Objects.equals(usernameTextfeild.getText(), username)) {
                             found = true;
                             if (Objects.equals(passwordTextfeild.getText(), password)) {
-                                //done
+                                myUsername = usernameTextfeild.getText();
+                                this.creator = new GameCreator(stage, myUsername);
                             } else {usernameLabel.setText("Password is incorrect.");}
                         }}
                     if (!found) {usernameLabel.setText("Username does not exist.");}
