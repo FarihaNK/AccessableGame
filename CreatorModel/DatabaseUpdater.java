@@ -10,15 +10,9 @@ import java.util.Objects;
 
 public class DatabaseUpdater{
     static Connection connection;
-
-    static {
-        try {
+    static {try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+        } catch (SQLException e) {throw new RuntimeException(e);}}
     public ArrayList<Node> nodeList = new ArrayList<>();
     public int game_id;
     public String gamename;

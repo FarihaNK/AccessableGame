@@ -4,7 +4,6 @@ import GameModel.AccessibleGame;
 import Visualizer.GameVisualizer;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -112,9 +111,13 @@ public class CreatedGamePlayer{
          PreparedStatement ps1 = connection.prepareStatement("SELECT Number_of_rooms FROM Games WHERE Game_id = "+game_id+";");
          ResultSet resultSet1 = ps1.executeQuery();
          resultSet1.next();
+         System.out.println("CHECK1");
+         System.out.println(game_id);
 
          int x = resultSet1.getInt("Number_of_rooms");
-        this.number_of_rooms = x;
+         this.number_of_rooms = x;
+         System.out.println("CHECK2");
+         System.out.println(x);
 
          File gamenameFile = new File("Games/"+gamename+"/");
          gamenameFile.mkdirs();
@@ -122,14 +125,18 @@ public class CreatedGamePlayer{
          String roomsPath = "Games/"+gamename+"/rooms.txt";
          try {
              FileWriter fileWriter = new FileWriter(roomsPath);
+             System.out.println("CHECK3");
+
              int r = 1;
              while (r <= number_of_rooms) {
                  fileWriter.write(r+ "\n");
+                 System.out.println("check");
 
                  PreparedStatement ps2 = connection.prepareStatement("SELECT Room_name FROM Game_"+game_id+" WHERE Room_id = "+r+";");
                  ResultSet resultSet2 = ps2.executeQuery();
                  resultSet2.next();
                  String a = resultSet2.getString("Room_name");
+                 System.out.println("check2");
 
                  fileWriter.write(a+"\n");
 
@@ -190,17 +197,16 @@ public class CreatedGamePlayer{
                  ArrayList<String> b = new ArrayList<>(Arrays.asList(elements));
 
                  for (String obj: b) {
-                     fileWriter.write(obj+"\n");
-                     fileWriter.write(objectInfo.get(obj) + "\n");
-                     fileWriter.write(r+"\n\n");
+                     if (!Objects.equals(obj, "")){
+                         fileWriter.write(obj+"\n");
+                         fileWriter.write(objectInfo.get(obj) + "\n");
+                         fileWriter.write(r+"\n\n");
+                     }
                  }
-
                  r++;
-
              } fileWriter.close();
          } catch (Exception e) {
-             System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
-                     new Text("There was an error with your game, restart the application.")));
+             this.scene.getRoot().getChildrenUnmodifiable().add(new Text("There was an error with your game, restart the application."));
          }
     }
     public void writeHelp() throws IOException {
@@ -209,29 +215,29 @@ public class CreatedGamePlayer{
         String helpPath = "Games/"+gamename+"/help.txt";
         FileWriter fileWriter = new FileWriter(helpPath);
         fileWriter.write(
-                """
-                        To play this game you must move between locations and interact with objects by typing one or two word commands.
+            """
+            To play this game you must move between locations and interact with objects by typing one or two word commands.
 
-                        Some commands are motion commands.  These will move you from room to room. Motion commands include:
+            Some commands are motion commands.  These will move you from room to room. Motion commands include:
 
-                        UP, DOWN, EAST, WEST, NORTH, SOUTH
+            UP, DOWN, EAST, WEST, NORTH, SOUTH
 
-                        Not all motions are possible in every room. In addition, some rooms may have "special" or "secret" motion commands.
+            Not all motions are possible in every room. In addition, some rooms may have "special" or "secret" motion commands.
 
-                        There are other action commands in the game. These include:
+            There are other action commands in the game. These include:
 
-                        COMMANDS: this will print the moves that are legal in a given room.
-                        HELP: this will display instructions
-                        INVENTORY: this will print your current inventory.
-                        LOOK: this will print the description for the current room.
-                        TAKE <object>: this will take an object from a room and place it in your inventory. Replace <object> with the name of the object to take.  The object must be present in the room in order to take it.
-                        DROP <object>: this will drop an object in your inventory. Replace <object> with the name of the object to drop. The object must be in your inventory to drop it.
+            COMMANDS: this will print the moves that are legal in a given room.
+            HELP: this will display instructions
+            INVENTORY: this will print your current inventory.
+            LOOK: this will print the description for the current room.
+            TAKE <object>: this will take an object from a room and place it in your inventory. Replace <object> with the name of the object to take.  The object must be present in the room in order to take it.
+            DROP <object>: this will drop an object in your inventory. Replace <object> with the name of the object to drop. The object must be in your inventory to drop it.
 
-                        Some paths may be blocked.  To unblock a path you may need a specific object to be in your inventory.
+            Some paths may be blocked.  To unblock a path you may need a specific object to be in your inventory.
 
-                        The game is over when your player reaches the VICTORY room, or when your player DIES.
+            The game is over when your player reaches the VICTORY room, or when your player DIES.
 
-                        """
+            """
         );
         fileWriter.close();
     }

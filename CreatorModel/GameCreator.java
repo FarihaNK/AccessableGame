@@ -160,9 +160,7 @@ public class GameCreator {
     public void createButtonHandler(Button gameButton) {
         gameButton.setOnMousePressed(event -> gameButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 18px;"));
         gameButton.setOnMouseReleased(event -> gameButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 18px;"));
-        gameButton.setOnAction(event -> {
-            creatingrNumberPage();
-        });
+        gameButton.setOnAction(event -> creatingrNumberPage());
     }
 
     public void creatingrNumberPage() {
@@ -348,9 +346,9 @@ public class GameCreator {
                 pathLabel.setTextFill(Color.ORANGE);
                 }
                 else if (x < numRooms - 1) {
+                Integer.parseInt(numPaths.getText());
                 roominfo.add(roomName.getText());
                 roominfo.add(roomDescription.getText());
-                Integer.parseInt(numPaths.getText());
                 roominfo.add(numPaths.getText());
                 ArrayList<String> temp = new ArrayList<>();
                 for (Map.Entry<String, Boolean> k : obj.entrySet()){
@@ -360,6 +358,7 @@ public class GameCreator {
                 rInfoPage(x+1);
             }
             else {
+                Integer.parseInt(numPaths.getText());
                 roominfo.add(roomName.getText());
                 roominfo.add(roomDescription.getText());
                 roominfo.add(numPaths.getText());
@@ -382,7 +381,6 @@ public class GameCreator {
         root4.setAlignment(Pos.CENTER);
         root4.setSpacing(20);
         root4.setPadding(new Insets(50,50,50,50));
-
         Label label = new Label( "Indicate a possible direction player cant take (i.e. NORTH). " +
                 "Indicate the room number of the destination if the path is taken. Click 'Unblocked' " +
                 "if the path is blocked and indicate the object required to unblock it. Important Note: " +
@@ -391,7 +389,6 @@ public class GameCreator {
         label.setWrapText(true);
         label.setTextFill(Color.BLACK);
         root4.getChildren().add(label);
-
         for (int i = 1; i <= numRooms; i++) {
             Text text = new Text("Room " + i + " Paths");
             text.setId("RoomNum");
@@ -403,7 +400,6 @@ public class GameCreator {
             roomContainer.setSpacing(10);
             roomContainer.getChildren().add(text);
             DB.updateNodeList(text);
-
             for (int k = 0; k < Integer.parseInt(roominfo.get(4 * i - 2)); k++) {
                 HBox row = new HBox();
                 row.setAlignment(Pos.CENTER);
@@ -447,12 +443,10 @@ public class GameCreator {
                 blockedbutton.setOnMousePressed(event -> {
                     blockedbutton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 12px;");
                     blockedbutton.setText("Blocked");});
-
                 row.getChildren().addAll(p, arrow, q, blockedbutton);
 
                 roomContainer.getChildren().add(row);
             }
-
             root4.getChildren().add(roomContainer);
         }
 
@@ -464,11 +458,9 @@ public class GameCreator {
         submitInfoButton.setOnAction(event -> {
             boolean check = true;
             boolean exists21 = false;
-            for (Node n: root4.getChildren()) {
+            for (Node n: DB.nodeList) {
                 if (n instanceof TextField) {
-                    if (((TextField) n).getText().isEmpty()) {check = false;}
-                    if (Objects.equals(n.getId(), "Object")) {
-                        if (obj.containsKey(((TextField) n).getText())) {check = false;}}
+                    if (!Objects.equals(n.getId(), "Object") && ((TextField) n).getText().isEmpty()) {check = false;}
                     if (Objects.equals(n.getId(), "Destination")) {
                         try {int x = Integer.parseInt(((TextField) n).getText()); if (x == 21){exists21 = true;}
                         } catch (Exception e) {check = false;}
