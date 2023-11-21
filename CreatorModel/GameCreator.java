@@ -188,7 +188,7 @@ public class GameCreator {
         text.setFill(Color.BLACK);
         root3.getChildren().add(text);
 
-        Label pathLabel = new Label("Room Name and Number of Paths categories are required. " +
+        Label pathLabel = new Label("Room Name, Room Description, and Number of Paths are required. " +
                 "Number of paths must be an integer.");
         pathLabel.setFont(Font.font("Arial", 15));
         pathLabel.setWrapText(true);
@@ -282,9 +282,15 @@ public class GameCreator {
         root3.getChildren().add(submitInfoButton);
 
         submitInfoButton.setOnAction(event -> {
-            try{if (x < numRooms - 1) {
+            try{if (roomName.getText().isEmpty() || roomDescription.getText().isEmpty() || numPaths.getText().isEmpty()){
+                pathLabel.setText("Error: Room Name, Room Description, and Number of Paths " +
+                        "are required. Number of Paths must be an integer.");
+                pathLabel.setTextFill(Color.ORANGE);
+                }
+                else if (x < numRooms - 1) {
                 roominfo.add(roomName.getText());
                 roominfo.add(roomDescription.getText());
+                Integer.parseInt(numPaths.getText());
                 roominfo.add(numPaths.getText());
                 ArrayList<String> temp = new ArrayList<>();
                 for (Map.Entry<String, Boolean> k : obj.entrySet()){
@@ -303,8 +309,8 @@ public class GameCreator {
                 }
                 roominfo.add(temp.toString());
                 pathInfoPage();}
-            } catch (Exception e) {pathLabel.setText("Error: Room Name and Number of Paths " +
-                    "categories are required. Number of Paths must be an integer.");
+            } catch (Exception e) {pathLabel.setText("Error: Room Name, Room Description, and Number of Paths " +
+                    "are required. Number of Paths must be an integer.");
                 pathLabel.setTextFill(Color.ORANGE);}
         });
 
@@ -319,7 +325,8 @@ public class GameCreator {
 
         Label label = new Label( "Indicate a possible direction player cant take (i.e. NORTH). " +
                 "Indicate the room number of the destination if the path is taken. Click 'Unblocked' " +
-                "if the path is blocked and indicate the object required to unblock it.");
+                "if the path is blocked and indicate the object required to unblock it. Important Note: " +
+                "One of the path destinations must be to room 21. This path will lead to victory and game will be won!");
         label.setFont(Font.font("Arial", 15));
         label.setWrapText(true);
         label.setTextFill(Color.BLACK);
@@ -396,17 +403,19 @@ public class GameCreator {
         root4.getChildren().add(submitInfoButton);
         submitInfoButton.setOnAction(event -> {
             boolean check = true;
+            boolean exists21 = false;
             for (Node n: root4.getChildren()) {
                 if (n instanceof TextField) {
                     if (((TextField) n).getText().isEmpty()) {check = false;}
                     if (Objects.equals(n.getId(), "Object")) {
                         if (obj.containsKey(((TextField) n).getText())) {check = false;}}
                     if (Objects.equals(n.getId(), "Destination")) {
-                        try {Integer.parseInt(((TextField) n).getText());} catch (Exception e) {check = false;}
+                        try {int x = Integer.parseInt(((TextField) n).getText()); if (x == 21){exists21 = true;}
+                        } catch (Exception e) {check = false;}
                     }
                 }
             }
-            if (!check) {label.setTextFill(Color.ORANGE);}
+            if (!check || !exists21) {label.setTextFill(Color.ORANGE);}
             else {
                 try {
                     submitInfoButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 20px;");
