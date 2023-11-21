@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.Objects;
 
 public class CreatedGamePlayer{
     Stage stage;
+    Scene scene;
     int game_id;
     int number_of_rooms;
     Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameCreatorApp", "root", "Thebookthief100%");
@@ -62,6 +64,7 @@ public class CreatedGamePlayer{
         root.setSpacing(30);
         root.setStyle("-fx-background-color: black;");
         Scene scene = new Scene(root);
+        this.scene = scene;
 
         Text text = new Text("Do you want to share your game?");
         text.setFont(Font.font("Arial", 25));
@@ -86,6 +89,12 @@ public class CreatedGamePlayer{
         noButton.setTextFill(Color.WHITE);
         noButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");
         yesnoButtons.getChildren().add(noButton);
+        noButton.setOnMouseClicked(event -> {
+            noButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 15px;");
+            yesButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");});
+        yesButton.setOnMouseClicked(event -> {
+            yesButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 15px;");
+            noButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 15px;");});
 
         Text text2 = new Text("Click to play");
         text2.setFont(Font.font("Arial", 25));
@@ -113,18 +122,13 @@ public class CreatedGamePlayer{
         playButton.setOnAction(event -> {
             try {
                 writeRooms();
-            } catch (SQLException e) {
+            } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    public ArrayList<ArrayList<?>> getObjectList(){
-        ArrayList<ArrayList<?>> output = new ArrayList<>();
-        //TODO: update object list with all objects in room
-        return output;
-    }
-     public void writeRooms() throws SQLException {
+     public void writeRooms() throws SQLException, IOException {
          PreparedStatement ps1 = connection.prepareStatement("SELECT Number_of_rooms FROM Games WHERE Game_id = "+game_id+";");
          ResultSet resultSet1 = ps1.executeQuery();
          resultSet1.next();
@@ -180,19 +184,20 @@ public class CreatedGamePlayer{
              }
              fileWriter.write("21\n");
              fileWriter.write("Victory\n");
-             fileWriter.write("You have collected all the treasures and are admitted to the Adventurer's Hall of Fame.  Congratulations!\n");
+             fileWriter.write("You have collected all the treasures and are admitted to the Adventurer's Hall of Fame. Congratulations!\n");
              fileWriter.write("-----\n");
              fileWriter.write("FORCED     0\n");
              fileWriter.write("\n");
 
              fileWriter.close();
          } catch (Exception e) {
-             //TODO: handle exception
+             System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
+                     new Text("There was an error with your game, restart the application.")));
          }
          writeObjects();
      }
 
-     public void writeObjects() throws SQLException{
+     public void writeObjects() throws SQLException, IOException {
          String objPath = "Games/"+gamename+"/objects.txt";
          try {
              int r = 1;
@@ -215,7 +220,39 @@ public class CreatedGamePlayer{
 
              } fileWriter.close();
          } catch (Exception e) {
-             //TODO: handle exception
+             System.out.println(this.scene.getRoot().getChildrenUnmodifiable().add(
+                     new Text("There was an error with your game, restart the application.")));
          }
+         writeHelp();
+    }
+    public void writeHelp() throws IOException {
+        String helpPath = "Games/"+gamename+"/help.txt";
+        FileWriter fileWriter = new FileWriter(helpPath);
+        fileWriter.write(
+                """
+                        To play this game you must move between locations and interact with objects by typing one or two word commands.
+
+                        Some commands are motion commands.  These will move you from room to room. Motion commands include:
+
+                        UP, DOWN, EAST, WEST, NORTH, SOUTH
+
+                        Not all motions are possible in every room. In addition, some rooms may have "special" or "secret" motion commands.
+
+                        There are other action commands in the game. These include:
+
+                        COMMANDS: this will print the moves that are legal in a given room.
+                        HELP: this will display instructions
+                        INVENTORY: this will print your current inventory.
+                        LOOK: this will print the description for the current room.
+                        TAKE <object>: this will take an object from a room and place it in your inventory. Replace <object> with the name of the object to take.  The object must be present in the room in order to take it.
+                        DROP <object>: this will drop an object in your inventory. Replace <object> with the name of the object to drop. The object must be in your inventory to drop it.
+
+                        Some paths may be blocked.  To unblock a path you may need a specific object to be in your inventory.
+
+                        The game is over when your player reaches the VICTORY room, or when your player DIES.
+
+                        """
+        );
+        fileWriter.close();
     }
 }
