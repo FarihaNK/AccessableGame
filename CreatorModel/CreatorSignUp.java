@@ -30,20 +30,20 @@ public class CreatorSignUp {
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         root.setSpacing(30);
-        root.setStyle("-fx-background-color: darkorange;");
+        root.setStyle("-fx-background-color: darkgreen;");
         Scene scene = new Scene(root);
 
         Button signUpButton = new Button("Sign Up");
         signUpButton.setPrefWidth(300);
         signUpButton.setPrefHeight(100);
-        signUpButton.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 25px;");
+        signUpButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 25px;");
         root.getChildren().add(signUpButton);
         signUpHandler(signUpButton);
 
         Button logInButton = new Button("Log In");
         logInButton.setPrefWidth(300);
         logInButton.setPrefHeight(100);
-        logInButton.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 25px;");
+        logInButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 25px;");
         root.getChildren().add(logInButton);
         logInHandler(logInButton);
 
@@ -56,14 +56,14 @@ public class CreatorSignUp {
 
     public void signUpHandler(Button button){
         button.setOnMousePressed(event -> button.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-font-size: 25px;"));
-        button.setOnMouseReleased(event -> button.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 25px;"));
+        button.setOnMouseReleased(event -> button.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 25px;"));
         button.setOnAction(event -> {
             signUpPage();
         });
     }
     public void logInHandler(Button button){
         button.setOnMousePressed(event -> button.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-font-size: 25px;"));
-        button.setOnMouseReleased(event -> button.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 25px;"));
+        button.setOnMouseReleased(event -> button.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 25px;"));
         button.setOnAction(event -> {
             logInPage();
         });
@@ -93,7 +93,7 @@ public class CreatorSignUp {
         usernameTextfeild.setFont(new Font("Arial", 20));
         usernameTextfeild.setFocusTraversable(true);
         usernameTextfeild.setPrefHeight(50);
-        usernameTextfeild.setStyle("-fx-background-color: lightgreen;");
+        usernameTextfeild.setStyle("-fx-background-color: orange;");
 
         Label passwordLabel = new Label("Password");
         passwordLabel.setFont(Font.font("Arial", 20));
@@ -106,15 +106,15 @@ public class CreatorSignUp {
         passwordTextfeild.setFont(new Font("Arial", 20));
         passwordTextfeild.setFocusTraversable(true);
         passwordTextfeild.setPrefHeight(50);
-        passwordTextfeild.setStyle("-fx-background-color: lightgreen;");
+        passwordTextfeild.setStyle("-fx-background-color: orange;");
 
         Button submitButton = new Button("Submit");
         submitButton.setPrefWidth(200);
         submitButton.setPrefHeight(60);
-        submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 17px;");
+        submitButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;");
         root.getChildren().add(submitButton);
-        submitButton.setOnMousePressed(event -> submitButton.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 17px;"));
-        submitButton.setOnMouseReleased(event -> submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 17px;"));
+        submitButton.setOnMousePressed(event -> submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 17px;"));
+        submitButton.setOnMouseReleased(event -> submitButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;"));
         submitButton.setOnAction(event -> {
             try{
                 if (usernameTextfeild.getText().length() < 4 || passwordTextfeild.getText().length() < 4){
@@ -168,7 +168,7 @@ public class CreatorSignUp {
         usernameTextfeild.setFont(new Font("Arial", 20));
         usernameTextfeild.setFocusTraversable(true);
         usernameTextfeild.setPrefHeight(50);
-        usernameTextfeild.setStyle("-fx-background-color: lightgreen;");
+        usernameTextfeild.setStyle("-fx-background-color: orange;");
 
         Label passwordLabel = new Label("Password");
         passwordLabel.setFont(Font.font("Arial", 20));
@@ -181,15 +181,15 @@ public class CreatorSignUp {
         passwordTextfeild.setFont(new Font("Arial", 20));
         passwordTextfeild.setFocusTraversable(true);
         passwordTextfeild.setPrefHeight(50);
-        passwordTextfeild.setStyle("-fx-background-color: lightgreen;");
+        passwordTextfeild.setStyle("-fx-background-color: orange;");
 
         Button submitButton = new Button("Submit");
         submitButton.setPrefWidth(200);
         submitButton.setPrefHeight(60);
-        submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 17px;");
+        submitButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;");
         root.getChildren().add(submitButton);
-        submitButton.setOnMousePressed(event -> submitButton.setStyle("-fx-background-color: green; -fx-text-fill: black; -fx-font-size: 17px;"));
-        submitButton.setOnMouseReleased(event -> submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: black; -fx-font-size: 17px;"));
+        submitButton.setOnMousePressed(event -> submitButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 17px;"));
+        submitButton.setOnMouseReleased(event -> submitButton.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 17px;"));
         submitButton.setOnAction(event -> {
             try{
                 if (usernameTextfeild.getText().isEmpty() || passwordTextfeild.getText().isEmpty()){
