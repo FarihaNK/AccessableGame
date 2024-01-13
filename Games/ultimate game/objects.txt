@@ -1,0 +1,28 @@
+PLANT
+a small plant murmuring 'Water, water'
+1
+
+BOOK
+a copy of an illuminated manuscript
+1
+
+EGGS
+a nest of golden eggs
+2
+
+KEYS
+a set of keys
+2
+
+EGGS
+a nest of golden eggs
+3
+
+CHEST
+a pirate chest
+3
+
+CHEST
+a pirate chest
+4
+

@@ -1,0 +1,8 @@
+EMERALD
+an emerald the size of a plover's egg
+1
+
+PLANT
+a small plant murmuring 'Water, water'
+1
+

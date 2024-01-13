@@ -1,0 +1,43 @@
+1
+master bedroom
+the master bedroom in the red house
+-----
+Direction     1
+Direction     2
+
+2
+fdgsgf
+sfdfgb
+-----
+Direction     3/BIRD
+Direction     1
+Direction     4
+
+3
+dfgd
+dfgdf
+-----
+Direction     4/BOOK
+Direction     1
+Direction     2
+Direction     4
+
+4
+dfg
+dfg
+-----
+Direction     1
+
+5
+dfg
+dfg
+-----
+Direction     4
+Direction     21
+
+21
+Victory
+You have collected all the treasures and are admitted to the Adventurer's Hall of Fame. Congratulations!
+-----
+FORCED     0
+

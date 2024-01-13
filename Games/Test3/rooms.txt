@@ -1,0 +1,19 @@
+1
+Room1Test3
+Room1Test3Description
+-----
+NORTH     1
+SOUTH     2/EMERALD
+
+2
+Room2Test3
+Room2Test3Description
+-----
+EAST     21
+
+21
+Victory
+You have collected all the treasures and are admitted to the Adventurer's Hall of Fame. Congratulations!
+-----
+FORCED     0
+
