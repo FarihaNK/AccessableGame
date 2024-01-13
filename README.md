@@ -10,35 +10,33 @@ GameCreatorHub empowers users to engage in a world of interactive storytelling. 
 
 - **Sign In**: Create your account to unlock personalized features and track your game creation journey.
 
-![GameCreatorHub Home](/screenshots/signin.png)
+  <img src="/screenshots/signin.png" alt="GameCreatorHub Sign In" width="400">
 
-*Provide a unique username and password to log in or sign. MySQL will handle authentication.*
+  *Provide a unique username and password to log in or sign. MySQL will handle authentication.*
 
-![GameCreatorHub Home](/screenshots/home.png)
+  <img src="/screenshots/home.png" alt="GameCreatorHub Home" width="400">
 
-*When you are logged in, you can access the homepage where you can choose to play, create and share games.*
+  *When you are logged in, you can access the homepage where you can choose to play, create and share games.*
 
 - **Play**: Dive into a diverse collection of adventure games crafted by our community. Explore unique worlds and captivating narratives.
 
-![GameCreatorHub Home](/screenshots/play.png)
+  <img src="/screenshots/play.png" alt="GameCreatorHub Play" width="400">
 
-*You will play an adventure game, collect objects and move through the passages to get to the destination.*
+  *You will play an adventure game, collect objects and move through the passages to get to the destination.*
 
 - **Create**: Unleash your creativity by building your adventure games. Use our intuitive game creation tools to design characters, write dialogues, and shape your own stories.
 
-![GameCreatorHub Home](/screenshots/share.png)
+  <img src="/screenshots/share.png" alt="GameCreatorHub Share" width="400">
 
-*Access the hub where you can explore games created by users like you.*
+  *Access the hub where you can explore games created by users like you.*
 
-- **Share**: Showcase your creations with the community. Share your games, and let others experience the worlds you've imagined.
+  <img src="/screenshots/create1.png" alt="GameCreatorHub Create 1" width="400">
 
-![GameCreatorHub Home](/screenshots/create1.png)
+  *Name your game and choose your rooms and objects.*
 
-*Name your game and choose your rooms and objects.*
+  <img src="/screenshots/create2.png" alt="GameCreatorHub Create 2" width="400">
 
-![GameCreatorHub Home](/screenshots/create2.png)
-
-*Identify each passage and objects required to access them.*
+  *Identify each passage and objects required to access them.*
 
 ---
 
