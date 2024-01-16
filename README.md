@@ -24,7 +24,7 @@ GameCreatorHub empowers users to engage in a world of interactive storytelling. 
 
   *You will play an adventure game, collect objects and move through the passages to get to the destination.*
 
-- **Create**: Unleash your creativity by building your adventure games. Use our intuitive game creation tools to design characters, write dialogues, and shape your own stories.
+- **Create**: Unleash your creativity by building your adventure games. Use our intuitive game creation tools to design rooms, pathways, objects, and shape your own stories.
 
   <img src="/screenshots/share.png" alt="GameCreatorHub Share" width="400">
 
